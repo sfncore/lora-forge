@@ -1,0 +1,39 @@
+# Output directories (generated data, checkpoints, adapters)
+output/
+*.pyc
+__pycache__/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+*.key
+
+# Jupyter
+.ipynb_checkpoints/
+
+# WandB
+wandb/
+
+# Gas Town rig management
+.repo.git/
+.land-worktree/
+plugins/

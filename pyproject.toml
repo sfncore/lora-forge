@@ -1,0 +1,28 @@
+[project]
+name = "lora-forge"
+version = "0.1.0"
+description = "LoRA fine-tuning pipeline for Gas Town agent roles"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+dependencies = [
+    "tiktoken>=0.7.0",
+    "datasets>=2.18.0",
+    "xxhash>=3.4.0",
+]
+
+[project.optional-dependencies]
+gpu = [
+    "torch>=2.1.0",
+    "transformers>=4.40.0",
+    "peft>=0.10.0",
+    "bitsandbytes>=0.43.0",
+    "accelerate>=0.28.0",
+    "axolotl>=0.5.0",
+    "wandb>=0.16.0",
+    "flash-attn>=2.5.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
