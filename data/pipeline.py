@@ -190,6 +190,23 @@ def run_pipeline(
             stats["duplicates_removed"],
         )
 
+        # Split per-role datasets for Phase 2 per-role adapters.
+        role_files: dict[str, int] = {}
+        by_role: dict[str, list[dict]] = {}
+        for sample in train_samples:
+            role = sample.get("metadata", {}).get("role", "unknown")
+            by_role.setdefault(role, []).append(sample)
+
+        for role, samples in by_role.items():
+            role_path = output_dir / f"{role}_train.jsonl"
+            with open(role_path, "w") as f:
+                for sample in samples:
+                    append_jsonl(sample, f)
+            role_files[role] = len(samples)
+
+        stats["per_role_files"] = role_files
+        logger.info("Wrote per-role datasets: %s", ", ".join(f"{r}={c}" for r, c in sorted(role_files.items())))
+
     return stats
 
 
