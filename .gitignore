@@ -39,3 +39,8 @@ wandb/
 .repo.git/
 .land-worktree/
 plugins/
+
+# Gas Town (added by gt)
+.runtime/
+.claude/commands/
+.logs/
