@@ -1,13 +1,14 @@
 #!/bin/bash
 # Pull trained LoRA adapter from remote GPU machine.
-# Usage: ./scripts/pull_adapter.sh user@gpu-host [checkpoint-name]
+# Usage: ./scripts/pull_adapter.sh user@gpu-host [checkpoint-name] [role]
 
 set -euo pipefail
 
 REMOTE="${1:?Usage: $0 user@gpu-host [checkpoint-name]}"
-CHECKPOINT="${2:-gastown-v1}"
+CHECKPOINT="${2:-mayor-v1}"
 REMOTE_DIR="/workspace/lora-forge/output/checkpoints/${CHECKPOINT}"
 LOCAL_DIR="output/adapters/${CHECKPOINT}"
+ROLE="${3:-mayor}"
 
 echo "Pulling adapter from ${REMOTE}:${REMOTE_DIR}..."
 
