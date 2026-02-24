@@ -15,9 +15,9 @@ ssh "$REMOTE" "mkdir -p ${REMOTE_DIR}/output/datasets ${REMOTE_DIR}/configs/role
 # Sync configs
 rsync -avz configs/ "${REMOTE}:${REMOTE_DIR}/configs/"
 
-# Sync training data
-rsync -avz output/datasets/gastown_train.jsonl "${REMOTE}:${REMOTE_DIR}/output/datasets/"
-rsync -avz output/datasets/gastown_val.jsonl "${REMOTE}:${REMOTE_DIR}/output/datasets/"
+# Sync training data (all roles, not just gastown)
+rsync -avz output/datasets/*_train.jsonl "${REMOTE}:${REMOTE_DIR}/output/datasets/"
+rsync -avz output/datasets/*_val.jsonl "${REMOTE}:${REMOTE_DIR}/output/datasets/"
 
 echo "Done. SSH into ${REMOTE} and run:"
 echo "  cd ${REMOTE_DIR}"
