@@ -22,6 +22,7 @@ from data.transform.chunker import Chunk, chunk_turns
 from data.transform.deduplicator import deduplicate
 from data.transform.quality_filter import assess_turns
 from data.transform.role_tagger import tag_role
+from data.transform.secret_scrubber import scrub_sample
 from data.transform.tool_normalizer import normalize_turn_content
 
 logger = logging.getLogger(__name__)
@@ -142,6 +143,15 @@ def run_pipeline(
             all_samples.extend(samples)
 
         logger.info("Generated %d samples before dedup", len(all_samples))
+
+        # Scrub secrets from all samples.
+        total_secrets = 0
+        for sample in all_samples:
+            _, count = scrub_sample(sample)
+            total_secrets += count
+        if total_secrets:
+            logger.info("Scrubbed %d secrets from training data", total_secrets)
+        stats["secrets_scrubbed"] = total_secrets
 
         # Deduplicate.
         before_dedup = len(all_samples)

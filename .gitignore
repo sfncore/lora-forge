@@ -1,5 +1,7 @@
-# Output directories (generated data, checkpoints, adapters)
-output/
+# Output directories (checkpoints, adapters — large binary files)
+output/checkpoints/
+output/adapters/
+output/datasets/prepared/
 *.pyc
 __pycache__/
 *.egg-info/
