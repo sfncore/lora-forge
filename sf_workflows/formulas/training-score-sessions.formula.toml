@@ -1,0 +1,131 @@
+# Training Session Scorer Formula
+#
+# Score training data quality by linking sessions to bead outcomes.
+# Run after a convoy completes or on a schedule to keep scores fresh.
+#
+# Usage:
+#   gt formula run training-score-sessions
+#   gt formula run training-score-sessions --var scope="convoy:cv-abc123"
+#   gt formula run training-score-sessions --var scope="role:polecat"
+
+description = """
+Score training session quality using bead outcomes from the Dolt database.
+
+Links session transcripts to the beads they worked on, then scores each
+session based on outcome signals: clean close, rework count, escalation
+frequency, time-to-completion vs median.
+
+Run this:
+- After a convoy completes (scores all sessions from that convoy)
+- On a schedule (weekly rescore of recent sessions)
+- Before retraining (ensure scores are fresh)
+
+Output: updated quality scores in the training dataset, scoring report.
+"""
+formula = "training-score-sessions"
+type = "workflow"
+version = 1
+
+[[steps]]
+id = "discover"
+title = "Discover sessions to score"
+description = """
+Identify which sessions need scoring based on {{scope}}.
+
+**Scope options:**
+- `all` — rescore everything
+- `convoy:<id>` — sessions from a specific convoy
+- `role:<name>` — all sessions for a role (mayor, deacon, etc.)
+- `recent:<days>` — sessions from the last N days
+- `unscored` — only sessions without outcome scores
+
+**Process:**
+1. Query beads database for relevant beads: `bd query "state=closed OR state=superseded"`
+2. Cross-reference with events to find associated session IDs
+3. Load session metadata from training dataset
+4. Report: N sessions found, N already scored, N to score
+
+**Output:** List of (session_id, bead_id) pairs to score.
+"""
+acceptance = "Session list generated with bead associations"
+
+[[steps]]
+id = "score"
+title = "Score sessions against bead outcomes"
+needs = ["discover"]
+description = """
+Score each session using bead lifecycle signals.
+
+**Scoring rubric (0.0 to 1.0):**
+
+| Signal | Weight | Score |
+|--------|--------|-------|
+| Bead closed on first attempt | 0.3 | 1.0 if yes, 0.0 if no |
+| No escalations required | 0.2 | 1.0 if none, 0.5 per escalation |
+| Time within 2x role median | 0.2 | 1.0 if within, scales down |
+| Clean PR (merged without rework) | 0.2 | 1.0 if clean, 0.3 if reworked |
+| No error loops (same cmd 3x+) | 0.1 | 1.0 if clean, 0.0 if looping |
+
+**Process:**
+1. For each (session_id, bead_id) pair:
+   - `bd show <bead_id>` — check lifecycle state
+   - `bd history <bead_id>` — count reopens, state changes
+   - Check events for escalation mails
+   - Check session transcript for error loops
+2. Compute weighted outcome_score
+3. Write scores to a scoring report JSONL
+
+**Output:** `output/scores/session_scores.jsonl` with session_id, bead_id, outcome_score, breakdown.
+"""
+acceptance = "All sessions scored, scoring report written"
+
+[[steps]]
+id = "apply"
+title = "Apply scores to training dataset"
+needs = ["score"]
+description = """
+Update the training dataset with outcome scores.
+
+**Process:**
+1. Load session scores from scoring report
+2. Load existing training dataset (gastown_train.jsonl + per-role files)
+3. For each sample, update metadata.outcome_score from scoring report
+4. Optionally filter: remove samples below threshold (default: keep all, add score only)
+5. Regenerate per-role dataset files with updated scores
+6. Report: score distribution, samples above/below threshold, role breakdown
+
+**Filtering policy** (set via {{filter_policy}}):
+- `score_only` — add scores but keep all samples (default)
+- `exclude_below:0.3` — remove samples with outcome_score < 0.3
+- `downweight` — keep all but adjust quality_score = quality_score * outcome_score
+
+**Output:** Updated dataset files, filtering report.
+"""
+acceptance = "Training dataset updated with outcome scores, report generated"
+
+[[steps]]
+id = "report"
+title = "Generate scoring summary"
+needs = ["apply"]
+description = """
+Generate a human-readable summary of scoring results.
+
+**Report contents:**
+- Total sessions scored, score distribution (histogram)
+- Per-role breakdown: mean score, worst sessions, best sessions
+- Flagged sessions: outcome_score < 0.3 (candidates for exclusion or DPO)
+- Recommendations: retrain needed? data quality improving or degrading?
+- Comparison to previous scoring run (if available)
+
+**Output:** `sf_workflows/reports/scoring-<date>.md`
+"""
+acceptance = "Scoring summary written with recommendations"
+
+[vars]
+[vars.scope]
+description = "What to score: all, convoy:<id>, role:<name>, recent:<days>, unscored"
+default = "unscored"
+
+[vars.filter_policy]
+description = "How to handle low scores: score_only, exclude_below:<threshold>, downweight"
+default = "score_only"

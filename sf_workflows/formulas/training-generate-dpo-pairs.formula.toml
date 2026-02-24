@@ -1,0 +1,144 @@
+# DPO Preference Pair Generation Formula
+#
+# Generate (preferred, rejected) response pairs from bead outcome data
+# for Direct Preference Optimization training (Phase 3).
+#
+# Usage:
+#   gt formula run training-generate-dpo-pairs --var role="polecat"
+#   gt formula run training-generate-dpo-pairs --var role="mayor" --var min_pairs=50
+
+description = """
+Generate DPO preference pairs from Gas Town operational data.
+
+Finds cases where the same (or similar) task was attempted multiple times
+with different outcomes, then pairs the successful attempt (preferred)
+against the failed attempt (rejected).
+
+Sources:
+- Same bead, different assignees (polecat A failed, polecat B succeeded)
+- Same bead, reopened (first attempt failed, second attempt succeeded)
+- Synthetic: Claude re-does a failed session with hindsight
+
+Requires: outcome scores from training-score-sessions formula.
+"""
+formula = "training-generate-dpo-pairs"
+type = "workflow"
+version = 1
+
+[[steps]]
+id = "find-natural-pairs"
+title = "Find natural preference pairs for {{role}}"
+description = """
+Search beads history for natural (preferred, rejected) pairs.
+
+**Pair sources:**
+
+1. **Reopened beads** — first attempt (rejected) vs final successful attempt (preferred)
+   ```
+   bd query "reopened>0 AND state=closed"
+   ```
+   For each: find session_ids for first attempt and final attempt.
+
+2. **Reassigned beads** — polecat A failed (rejected), polecat B succeeded (preferred)
+   Check bead assignment history via `bd history`.
+
+3. **Escalated beads** — polecat attempt (rejected) vs mayor resolution (preferred)
+   Only valid when both worked on the same task (not just oversight).
+
+4. **Convoy leg retries** — failed leg attempt vs successful retry.
+
+**For each pair:**
+- Extract the user prompt (should be same or very similar)
+- Extract the assistant response from each attempt
+- Verify the prompts are comparable (similar enough for DPO)
+- Record: preferred_session_id, rejected_session_id, prompt, bead_id
+
+**Output:** `output/dpo/natural_pairs.jsonl`
+"""
+acceptance = "Natural pairs identified with aligned prompts"
+
+[[steps]]
+id = "generate-synthetic-pairs"
+title = "Generate synthetic corrections for {{role}}"
+needs = ["find-natural-pairs"]
+description = """
+For failed sessions without natural pairs, generate synthetic corrections.
+
+**Process:**
+1. Identify failed sessions with no natural counterpart
+   (bead reopened but no second attempt, or unique failure mode)
+2. For each (up to {{max_synthetic}}):
+   a. Extract the user prompt from the failed session
+   b. Add hindsight context: "Previous attempt failed because: <diagnosis>"
+   c. Run Claude on the prompt with hindsight
+   d. Use Claude's response as "preferred", original as "rejected"
+3. Validate: does the synthetic response actually fix the identified issue?
+
+**Cost consideration:** Each synthetic pair costs one Claude API call.
+Default max_synthetic=20 to limit cost. Increase for larger campaigns.
+
+**Output:** `output/dpo/synthetic_pairs.jsonl`
+"""
+acceptance = "Synthetic pairs generated and validated"
+
+[[steps]]
+id = "format-dpo-dataset"
+title = "Format DPO dataset for training"
+needs = ["find-natural-pairs", "generate-synthetic-pairs"]
+description = """
+Combine natural and synthetic pairs into DPO training format.
+
+**Axolotl DPO format:**
+```json
+{
+  "prompt": "user message",
+  "chosen": "preferred assistant response",
+  "rejected": "rejected assistant response"
+}
+```
+
+**Process:**
+1. Merge natural_pairs.jsonl and synthetic_pairs.jsonl
+2. Deduplicate (same prompt appearing in multiple pairs)
+3. Validate format compliance
+4. Split train/val (90/10)
+5. Write to `output/datasets/{{role}}_dpo_train.jsonl`
+
+**Report:** pair counts, source breakdown (natural vs synthetic),
+prompt diversity, response length comparison.
+
+**Output:** DPO dataset files ready for `axolotl train configs/roles/{{role}}_dpo.yml`
+"""
+acceptance = "DPO dataset formatted, validated, and split into train/val"
+
+[[steps]]
+id = "report"
+title = "DPO pair generation report"
+needs = ["format-dpo-dataset"]
+description = """
+Summary of DPO pair generation.
+
+**Report:**
+- Total pairs: N natural + M synthetic
+- Role: {{role}}
+- Pair quality: prompt alignment scores, response length ratios
+- Coverage: which bead types / task types are represented
+- Gaps: failure modes without pairs (need more data or synthetic generation)
+- Recommendation: ready for DPO training? or need more pairs first?
+
+**Output:** `sf_workflows/reports/dpo-pairs-{{role}}-<date>.md`
+"""
+acceptance = "Report written with training readiness recommendation"
+
+[vars]
+[vars.role]
+description = "Role to generate DPO pairs for"
+required = true
+
+[vars.min_pairs]
+description = "Minimum pairs needed before recommending training (default 30)"
+default = "30"
+
+[vars.max_synthetic]
+description = "Maximum synthetic pairs to generate (each costs one Claude call)"
+default = "20"

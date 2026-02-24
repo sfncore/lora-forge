@@ -1,0 +1,123 @@
+# Agent-Assisted Training Data Curation Formula
+#
+# Use deployed deacon/witness adapters to review and score training
+# sessions. The trained agents understand Gas Town patterns and can
+# identify good vs bad decision-making in transcripts.
+#
+# Usage:
+#   gt formula run training-curate-with-agents --var role="mayor"
+#   gt formula run training-curate-with-agents --var role="polecat" --var reviewer="witness"
+
+description = """
+Use deployed Gas Town agents (deacon, witness) to review and score
+training data for other roles.
+
+The recursive improvement loop: trained agents score training data,
+producing better data for the next training cycle. Human calibrates
+by spot-checking agent scores.
+
+Requires: v1+ adapters deployed for the reviewer role.
+"""
+formula = "training-curate-with-agents"
+type = "workflow"
+version = 1
+
+[[steps]]
+id = "select-samples"
+title = "Select {{role}} samples for agent review"
+description = """
+Select a batch of training samples for the reviewer agent to evaluate.
+
+**Selection strategy:**
+- Prioritize samples without outcome scores (from session scorer)
+- Include a calibration set: 10 samples with known-good scores (human verified)
+- Include a mix of quality scores to test reviewer discrimination
+- Batch size: {{batch_size}} samples (default 50)
+
+**Process:**
+1. Load {{role}} training dataset
+2. Select batch using strategy above
+3. Include calibration set for accuracy checking
+4. Write batch to `output/curation/batch-<date>.jsonl`
+"""
+acceptance = "Sample batch selected with calibration set included"
+
+[[steps]]
+id = "agent-review"
+title = "Dispatch {{reviewer}} to review samples"
+needs = ["select-samples"]
+description = """
+Send the sample batch to a {{reviewer}} agent for evaluation.
+
+**Reviewer prompt:**
+For each training sample, the reviewer evaluates:
+1. **Command correctness** — are the gt/bd/git commands appropriate for the situation?
+2. **Decision quality** — did the agent make the right call? Would a different approach be better?
+3. **Completeness** — did the agent finish the task or leave it incomplete?
+4. **Gas Town protocol** — does it follow mail patterns, escalation rules, patrol conventions?
+5. **Overall score** — 0.0 (actively harmful to train on) to 1.0 (exemplary behavior)
+
+The reviewer writes per-sample scores and brief justifications.
+
+**Dispatch:**
+- If using deployed adapter: run via Petals inference with {{reviewer}} adapter loaded
+- If using Claude: dispatch as polecat with reviewer instructions
+- Parallel: split batch across multiple reviewer instances if available
+
+**Output:** `output/curation/reviews-<date>.jsonl`
+"""
+acceptance = "All samples reviewed with scores and justifications"
+
+[[steps]]
+id = "calibrate"
+title = "Calibrate agent scores against human ground truth"
+needs = ["agent-review"]
+description = """
+Compare agent reviewer scores against the calibration set to measure accuracy.
+
+**Process:**
+1. Extract calibration samples from review results
+2. Compare agent scores to known human scores
+3. Compute correlation and mean absolute error
+4. If correlation < 0.7 or MAE > 0.2: warn that reviewer needs improvement
+5. If correlation > 0.85: reviewer is reliable, scores can be trusted
+
+**Output:** Calibration report with accuracy metrics.
+
+**Human checkpoint:** Present calibration results and ask whether to proceed
+with applying agent scores to the training dataset.
+"""
+acceptance = "Calibration metrics computed, human has approved or flagged concerns"
+
+[[steps]]
+id = "apply-scores"
+title = "Apply agent curation scores"
+needs = ["calibrate"]
+description = """
+Merge agent review scores into the training dataset.
+
+**Process:**
+1. Load agent review scores (post-calibration adjustment if needed)
+2. Update training samples with agent_review_score in metadata
+3. Combine with outcome_score (if available) for composite score:
+   `composite = 0.5 * outcome_score + 0.5 * agent_review_score`
+4. Flag samples where outcome_score and agent_review_score disagree strongly
+   (difference > 0.4) — these need human review
+5. Write updated dataset and disagreement report
+
+**Output:** Updated training dataset, disagreement report for human review.
+"""
+acceptance = "Scores applied, disagreements flagged for human review"
+
+[vars]
+[vars.role]
+description = "Role whose training data to curate (mayor, deacon, polecat, etc.)"
+required = true
+
+[vars.reviewer]
+description = "Which agent role reviews the data (default: witness for polecat, deacon for others)"
+default = "deacon"
+
+[vars.batch_size]
+description = "Number of samples per review batch"
+default = "50"

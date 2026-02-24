@@ -1,0 +1,117 @@
+# Post-Convoy Training Data Harvest Formula
+#
+# After a convoy completes, harvest and score the session data
+# it generated. Convoys are high-value training data because they
+# involve coordinated multi-agent work with clear success/failure signals.
+#
+# Usage:
+#   gt formula run training-post-convoy-harvest --var convoy_id="cv-abc123"
+
+description = """
+Harvest training data from a completed convoy.
+
+Convoys produce high-value training data: multiple agents working on
+related tasks with clear outcome signals (all legs completed? synthesis
+successful? beads closed?).
+
+Run this automatically after each convoy completes to continuously
+grow the training dataset with scored, high-quality samples.
+
+Can be added to the mol-convoy-cleanup formula as a post-cleanup step,
+or triggered by the deacon during patrol when it detects completed convoys.
+"""
+formula = "training-post-convoy-harvest"
+type = "workflow"
+version = 1
+
+[[steps]]
+id = "extract-convoy-sessions"
+title = "Extract sessions from convoy {{convoy_id}}"
+description = """
+Find all session transcripts associated with this convoy.
+
+**Process:**
+1. `gt convoy show {{convoy_id}}` — get convoy details, leg IDs, synthesis status
+2. For each leg: find the polecat session ID from events/mail
+3. Find the synthesis session (if convoy type)
+4. Find any oversight sessions (deacon/witness monitoring during convoy)
+5. Collect all session file paths
+
+**Output:** List of session paths with convoy role annotations
+(leg executor, synthesizer, monitor).
+"""
+acceptance = "All convoy sessions identified with role annotations"
+
+[[steps]]
+id = "score-convoy-outcomes"
+title = "Score convoy execution quality"
+needs = ["extract-convoy-sessions"]
+description = """
+Score each convoy participant based on convoy outcome.
+
+**Convoy-level signals:**
+- All legs completed? Overall convoy success?
+- Synthesis quality (if applicable)
+- Any legs that required retry or reassignment?
+
+**Per-leg signals:**
+- Did this leg's polecat complete its bead?
+- Was the PR clean (merged without rework)?
+- Time vs median for similar tasks?
+- Any escalations during execution?
+
+**Scoring:**
+- Successful leg in successful convoy: baseline 0.8+
+- Failed leg in otherwise successful convoy: 0.3 (learn what NOT to do)
+- Successful leg but convoy failed at synthesis: 0.6 (execution good, coordination issue)
+- Retry leg that succeeded where predecessor failed: 0.9 (learn the fix)
+
+**Output:** Per-session scores with convoy context annotations.
+"""
+acceptance = "All convoy sessions scored with convoy-aware context"
+
+[[steps]]
+id = "integrate"
+title = "Add convoy sessions to training pipeline"
+needs = ["score-convoy-outcomes"]
+description = """
+Run the scored convoy sessions through the training pipeline.
+
+**Process:**
+1. Run extract → transform on convoy session files
+2. Apply convoy-aware outcome scores (from previous step)
+3. Append to existing per-role training datasets
+4. Deduplicate against existing data
+5. Report: new samples added per role, score distribution
+
+**Important:** Don't overwrite existing datasets — append new samples.
+Run the full pipeline periodically to regenerate clean datasets from scratch.
+
+**Output:** Updated training datasets with convoy samples appended.
+"""
+acceptance = "Convoy samples added to training datasets, dedup verified"
+
+[[steps]]
+id = "notify"
+title = "Report harvest results"
+needs = ["integrate"]
+description = """
+Send a summary to the mayor and log the harvest.
+
+**Process:**
+1. `gt mail send mayor` with harvest summary:
+   - Convoy ID, completion status
+   - New samples added: N total, per-role breakdown
+   - Score distribution of new samples
+   - Total dataset size after addition
+   - Recommendation: retrain threshold reached? (e.g., 10%+ new data since last train)
+2. Log to training history: `sf_workflows/reports/harvests.jsonl`
+
+**Output:** Mail sent, harvest logged.
+"""
+acceptance = "Mayor notified, harvest logged"
+
+[vars]
+[vars.convoy_id]
+description = "Convoy ID to harvest training data from"
+required = true
