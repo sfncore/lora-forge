@@ -43,9 +43,57 @@ Every `gt` command, mail sent, convoy dispatch. Trace a failed bead back to the 
 
 `bd history <bead-id>` shows every state change with timestamps. Diff between "what the agent did" and "what actually worked" when someone fixed it later.
 
+### OpenTelemetry (VictoriaMetrics + VictoriaLogs)
+
+Gas Town has a full OpenTelemetry instrumentation layer (`internal/telemetry/`) that exports structured metrics and logs when enabled via `GT_OTEL_METRICS_URL` / `GT_OTEL_LOGS_URL`.
+
+**Key metrics for training data scoring:**
+
+| Metric | What It Tells Us |
+|--------|-----------------|
+| `gastown.done.total` (exit_type=COMPLETED/ESCALATED/DEFERRED) | Direct outcome signal — did the polecat complete, escalate, or defer? |
+| `gastown.session.starts.total` + `stops.total` | Session duration (stop - start time) |
+| `gastown.polecat.spawns.total` + `removes.total` | Polecat lifecycle (was it removed prematurely?) |
+| `gastown.sling.dispatches.total` | How many times work was (re)dispatched for a bead |
+| `gastown.daemon.agent_restarts.total` | Agent crashed and needed restart — negative signal |
+| `gastown.bd.duration_ms` | Beads CLI latency (proxy for infrastructure issues vs agent issues) |
+| `gastown.convoy.creates.total` | Convoy lifecycle tracking |
+| `gastown.mail.operations.total` | Communication volume (high mail = coordination overhead) |
+
+**Key log events for session-level scoring:**
+
+| Event | Fields | Training Signal |
+|-------|--------|-----------------|
+| `done` | exit_type, status | **Primary outcome**: COMPLETED=good, ESCALATED=mixed, DEFERRED=neutral |
+| `sling` | bead, target, status | Work dispatch — multiple slings for same bead = rework |
+| `polecat.spawn` / `polecat.remove` | name, status | Clean lifecycle (spawn→done→remove) vs messy (spawn→restart→remove) |
+| `session.start` / `session.stop` | session_id, role | Duration and role context |
+| `daemon.restart` | agent_type | Agent crash — sessions before crash are lower quality |
+| `pane.output` | session, content | Raw agent output (opt-in) — can be used for error loop detection |
+
+**Why OTel is better than events.jsonl for scoring:**
+
+- **Structured**: typed fields, not free-form JSONL
+- **Timestamped**: precise timing for duration calculations
+- **Exit types**: `RecordDone` explicitly records COMPLETED vs ESCALATED vs DEFERRED
+- **Queryable**: VictoriaMetrics/VictoriaLogs support PromQL/LogsQL queries
+- **Crash detection**: daemon restart events flag sessions that ended abnormally
+
+**Integration with session scorer:**
+
+The `session_scorer.py` should query OTel data first (most reliable outcome signal), fall back to beads/events when OTel data isn't available (telemetry is opt-in).
+
+```python
+# Priority order for outcome scoring:
+# 1. OTel RecordDone exit_type (COMPLETED/ESCALATED/DEFERRED)
+# 2. Beads lifecycle (closed/reopened/superseded)
+# 3. Events trail (mail escalations, rework signals)
+# 4. Heuristic (session content analysis)
+```
+
 ### Session Metadata
 
-Each training sample already carries `session_id`, `role`, and `quality_score`. Link session_id back to beads and events to enrich with outcome data.
+Each training sample already carries `session_id`, `role`, and `quality_score`. Link session_id back to beads, events, and OTel data to enrich with outcome data.
 
 ## Improvement Approaches
 

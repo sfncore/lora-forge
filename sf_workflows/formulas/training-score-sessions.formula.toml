@@ -9,11 +9,17 @@
 #   gt formula run training-score-sessions --var scope="role:polecat"
 
 description = """
-Score training session quality using bead outcomes from the Dolt database.
+Score training session quality using OpenTelemetry data, bead outcomes,
+and event history.
+
+Primary scoring source: OTel RecordDone exit_type (COMPLETED/ESCALATED/DEFERRED)
+exported to VictoriaMetrics/VictoriaLogs via GT_OTEL_METRICS_URL/GT_OTEL_LOGS_URL.
+
+Fallback chain: OTel → Beads lifecycle → Events trail → Heuristic analysis.
 
 Links session transcripts to the beads they worked on, then scores each
-session based on outcome signals: clean close, rework count, escalation
-frequency, time-to-completion vs median.
+session based on outcome signals: exit type, clean close, rework count,
+escalation frequency, time-to-completion vs median.
 
 Run this:
 - After a convoy completes (scores all sessions from that convoy)
@@ -54,26 +60,39 @@ id = "score"
 title = "Score sessions against bead outcomes"
 needs = ["discover"]
 description = """
-Score each session using bead lifecycle signals.
+Score each session using OTel telemetry data (primary) with bead lifecycle fallback.
+
+**Data source priority:**
+1. OTel `RecordDone` exit_type via VictoriaLogs LogsQL query (most reliable)
+2. OTel metrics: `gastown.done.total`, `gastown.sling.dispatches.total`,
+   `gastown.daemon.agent_restarts.total` via VictoriaMetrics PromQL
+3. Beads lifecycle: `bd show`, `bd history` (fallback when OTel unavailable)
+4. Events trail: `~/.gt/.events.jsonl` escalation/rework signals
+5. Heuristic: session content analysis (last resort)
 
 **Scoring rubric (0.0 to 1.0):**
 
-| Signal | Weight | Score |
-|--------|--------|-------|
-| Bead closed on first attempt | 0.3 | 1.0 if yes, 0.0 if no |
-| No escalations required | 0.2 | 1.0 if none, 0.5 per escalation |
-| Time within 2x role median | 0.2 | 1.0 if within, scales down |
-| Clean PR (merged without rework) | 0.2 | 1.0 if clean, 0.3 if reworked |
-| No error loops (same cmd 3x+) | 0.1 | 1.0 if clean, 0.0 if looping |
+| Signal | Weight | Source | Score |
+|--------|--------|--------|-------|
+| Exit type: COMPLETED | 0.3 | OTel RecordDone / bead state | 1.0=completed, 0.5=escalated, 0.3=deferred |
+| Bead closed on first attempt | 0.2 | OTel sling count / bead reopens | 1.0 if yes, 0.0 if no |
+| No escalations required | 0.15 | OTel mail ops / events | 1.0 if none, 0.5 per escalation |
+| Time within 2x role median | 0.15 | OTel session start/stop | 1.0 if within, scales down |
+| Clean PR (merged without rework) | 0.1 | Beads / git history | 1.0 if clean, 0.3 if reworked |
+| No error loops (same cmd 3x+) | 0.05 | OTel pane.output / transcript | 1.0 if clean, 0.0 if looping |
+| No agent crashes | 0.05 | OTel daemon.restart | 1.0 if none, 0.0 if crashed |
 
 **Process:**
-1. For each (session_id, bead_id) pair:
-   - `bd show <bead_id>` — check lifecycle state
-   - `bd history <bead_id>` — count reopens, state changes
+1. Check if OTel data is available (VictoriaMetrics/VictoriaLogs reachable)
+2. For each (session_id, bead_id) pair:
+   - Query OTel logs for `done` event with matching session_id → get exit_type
+   - Query OTel metrics for sling dispatch count, restart count
+   - Fall back to `bd show <bead_id>` / `bd history <bead_id>` if OTel unavailable
    - Check events for escalation mails
    - Check session transcript for error loops
-2. Compute weighted outcome_score
-3. Write scores to a scoring report JSONL
+3. Compute weighted outcome_score
+4. Flag sessions where OTel and beads signals disagree (needs review)
+5. Write scores to a scoring report JSONL
 
 **Output:** `output/scores/session_scores.jsonl` with session_id, bead_id, outcome_score, breakdown.
 """
