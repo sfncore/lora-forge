@@ -1,0 +1,47 @@
+# Mayor role-specific LoRA config
+# Inherits from base.yml, overrides dataset and output
+
+base_model: Qwen/Qwen2.5-7B-Instruct
+model_type: AutoModelForCausalLM
+tokenizer_type: AutoTokenizer
+
+load_in_4bit: true
+adapter: qlora
+lora_r: 64
+lora_alpha: 128
+lora_dropout: 0.05
+lora_target_linear: true
+
+datasets:
+  - path: output/datasets/mayor_train.jsonl
+    type: sharegpt
+    conversation: chatml
+
+dataset_prepared_path: output/datasets/prepared_mayor
+val_set_size: 0.05
+output_dir: output/checkpoints/mayor-v1
+
+sequence_len: 4096
+sample_packing: true
+pad_to_sequence_len: true
+
+gradient_accumulation_steps: 4
+micro_batch_size: 2
+num_epochs: 3
+learning_rate: 2e-4
+lr_scheduler: cosine
+warmup_steps: 50
+optimizer: adamw_torch
+weight_decay: 0.01
+max_grad_norm: 1.0
+
+bf16: auto
+tf32: true
+flash_attention: true
+
+wandb_project: lora-forge
+wandb_name: mayor-v1
+
+saves_per_epoch: 2
+eval_steps: 50
+logging_steps: 10
