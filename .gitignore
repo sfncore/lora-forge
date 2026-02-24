@@ -44,3 +44,7 @@ plugins/
 .runtime/
 .claude/commands/
 .logs/
+
+# Oh My Pi and Beads runtime
+.beads/
+.omp/
