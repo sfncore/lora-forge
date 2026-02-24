@@ -124,7 +124,7 @@ Summary of DPO pair generation.
 - Pair quality: prompt alignment scores, response length ratios
 - Coverage: which bead types / task types are represented
 - Gaps: failure modes without pairs (need more data or synthetic generation)
-- Recommendation: ready for DPO training? or need more pairs first?
+- Recommendation: ready for DPO training? (need {{min_pairs}}+ pairs)
 
 **Output:** `sf_workflows/reports/dpo-pairs-{{role}}-<date>.md`
 """
