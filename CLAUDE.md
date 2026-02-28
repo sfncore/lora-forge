@@ -2,8 +2,8 @@
 
 ## What This Is
 
-A training data pipeline and LoRA fine-tuning configuration for Gas Town agent roles.
-The goal: fine-tune a model that excels at being a Gas Town agent (mayor, deacon, witness, refinery, polecat, crew).
+A per-role LoRA fine-tuning pipeline for Gas Town agents.
+The goal: train a dedicated LoRA adapter per Gas Town role (mayor, deacon, witness, refinery, polecat, crew) on Qwen 2.5 7B, with hyperparameters optimized by the Optuna rig using CMA-ES.
 
 ## Key Commands
 
@@ -16,15 +16,17 @@ make -C data all          # Full pipeline
 make -C data stats        # Print dataset statistics
 
 # Training (requires GPU)
-axolotl train configs/base.yml
+axolotl train configs/roles/mayor.yml   # Train a specific role adapter
+axolotl train configs/base.yml          # Train the shared base adapter
 ```
 
 ## Architecture
 
 - Data extraction runs on any machine (CPU only, pure Python)
 - Training runs on cloud GPU (RunPod A100 or similar)
-- Trained LoRA adapters are uploaded to HuggingFace Hub
-- Petals swarm serves the base model, agents load adapters client-side
+- Trained per-role LoRA adapters are uploaded to HuggingFace Hub
+- Petals swarm serves the base model, agents load their role-specific adapter client-side
+- Optuna rig handles hyperparameter optimization (CMA-ES sampler) using role_bench eval scores
 
 ## Data Sources
 
