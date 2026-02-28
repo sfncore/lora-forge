@@ -1,9 +1,10 @@
-"""Pipeline orchestrator: extract → transform → validate.
+"""Pipeline orchestrator: extract → score → transform → validate.
 
 Usage:
     python -m data.pipeline                          # Full pipeline
     python -m data.pipeline --step extract           # Extract only
     python -m data.pipeline --step transform         # Transform only
+    python -m data.pipeline --step score             # Score extracted sessions
     python -m data.pipeline --sessions-dir ~/.claude/projects  # Custom source
     python -m data.pipeline --output-dir output/datasets       # Custom output
 """
@@ -23,12 +24,34 @@ from data.transform.deduplicator import deduplicate
 from data.transform.quality_filter import assess_turns
 from data.transform.role_tagger import tag_role
 from data.transform.secret_scrubber import scrub_sample
+from data.transform.session_scorer import score_session
 from data.transform.tool_normalizer import normalize_turn_content
 
 logger = logging.getLogger(__name__)
 
 DEFAULT_SESSIONS_DIR = Path.home() / ".claude" / "projects"
 DEFAULT_OUTPUT_DIR = Path("output") / "datasets"
+
+
+def session_to_scorer_dict(session: ExtractedSession) -> dict:
+    """Convert ExtractedSession to dict format expected by session_scorer."""
+    conversations = []
+    for turn in session.turns:
+        conversations.append({
+            "from": "human" if turn.role == "user" else "gpt",
+            "value": turn.content,
+        })
+    
+    result = {
+        "conversations": conversations,
+        "role": session.metadata.get("role", "unknown"),
+    }
+    
+    # Include otel_signals if present in session metadata
+    if "otel_signals" in session.metadata:
+        result["otel_signals"] = session.metadata["otel_signals"]
+    
+    return result
 
 
 def extract_all(sessions_dir: Path) -> list[ExtractedSession]:
@@ -52,9 +75,14 @@ def extract_all(sessions_dir: Path) -> list[ExtractedSession]:
 def transform_session(session: ExtractedSession) -> list[dict]:
     """Transform an extracted session into training samples.
 
-    Pipeline: role tag → tool normalize → chunk → quality filter → format
+    Pipeline: score → role tag → tool normalize → chunk → quality filter → format
     """
-    # 1. Determine role.
+    # 1. Score the session for quality signal (outcome_score).
+    scorer_dict = session_to_scorer_dict(session)
+    scoring_result = score_session(scorer_dict)
+    outcome_score = scoring_result if 0.0 <= scoring_result <= 1.0 else None
+
+    # 2. Determine role.
     first_user_content = ""
     for turn in session.turns:
         if turn.role == "user":
@@ -62,17 +90,17 @@ def transform_session(session: ExtractedSession) -> list[dict]:
             break
     role = tag_role(Path(session.source_path), first_user_content)
 
-    # 2. Normalize tool results in each turn.
+    # 3. Normalize tool results in each turn.
     for turn in session.turns:
         turn.content = normalize_turn_content(turn.content)
 
-    # 3. Chunk long sessions.
+    # 4. Chunk long sessions.
     chunks = chunk_turns(session.turns)
 
-    # 4. Quality filter and format each chunk.
+    # 5. Quality filter and format each chunk.
     samples = []
     for chunk in chunks:
-        quality = assess_turns(chunk.turns)
+        quality = assess_turns(chunk.turns, outcome_score)
         if not quality.keep:
             continue
 
@@ -84,12 +112,59 @@ def transform_session(session: ExtractedSession) -> list[dict]:
             quality_score=quality.score,
         )
 
+        # Add outcome_score to sample metadata.
+        sample["metadata"]["outcome_score"] = outcome_score
+
         # Only keep samples with at least one human and one gpt message.
         roles_present = {msg["from"] for msg in sample["conversations"]}
         if "human" in roles_present and "gpt" in roles_present:
             samples.append(sample)
 
     return samples
+
+
+def score_all(sessions_dir: Path, output_dir: Path) -> dict:
+    """Score all extracted sessions without re-running full pipeline.
+    
+    Reads raw_sessions.jsonl from output_dir and adds scoring.
+    """
+    raw_path = output_dir / "raw_sessions.jsonl"
+    if not raw_path.exists():
+        raise FileNotFoundError(f"No raw sessions found at {raw_path}. Run extract first.")
+    
+    logger.info("Loading raw sessions from %s", raw_path)
+    
+    # Load and score sessions
+    scored_sessions = []
+    with open(raw_path, "r") as f:
+        for line in f:
+            record = json.loads(line.strip())
+            # Convert raw session dict to scorer format
+            session_dict = {
+                "conversations": [],
+                "role": record.get("metadata", {}).get("role", "unknown"),
+            }
+            
+            # Include otel_signals if present
+            if "otel_signals" in record.get("metadata", {}):
+                session_dict["otel_signals"] = record["metadata"]["otel_signals"]
+            
+            record["outcome_score"] = score_session(session_dict)
+            scored_sessions.append(record)
+    
+    # Write scored sessions
+    scored_path = output_dir / "raw_sessions_scored.jsonl"
+    with open(scored_path, "w") as f:
+        for record in scored_sessions:
+            f.write(json.dumps(record) + "\n")
+    
+    stats = {
+        "sessions_scored": len(scored_sessions),
+        "scored_path": str(scored_path),
+    }
+    
+    logger.info("Scored %d sessions, wrote to %s", len(scored_sessions), scored_path)
+    return stats
 
 
 def run_pipeline(
@@ -106,7 +181,10 @@ def run_pipeline(
 
     # Step 1: Extract.
     raw_path = output_dir / "raw_sessions.jsonl"
-    if step in ("all", "extract"):
+    sessions: list[ExtractedSession] = []
+    
+    if step in ("all", "extract", "transform", "score"):
+        # Always extract first - we need full session data with turns
         sessions = extract_all(sessions_dir)
         stats["sessions_extracted"] = len(sessions)
         stats["total_turns"] = sum(len(s.turns) for s in sessions)
@@ -123,15 +201,13 @@ def run_pipeline(
                 f.write(json.dumps(record) + "\n")
 
         logger.info("Extracted %d sessions, %d total turns", stats["sessions_extracted"], stats["total_turns"])
-    else:
-        sessions = []
+    
+    # Step 2: Score-only (separate scoring mode)
+    if step == "score":
+        return score_all(sessions_dir, output_dir)
 
-    # Step 2: Transform.
+    # Step 3: Transform (includes scoring via transform_session).
     if step in ("all", "transform"):
-        if not sessions:
-            # Re-extract if transform-only.
-            sessions = extract_all(sessions_dir)
-
         all_samples: list[dict] = []
         role_counts: dict[str, int] = {}
 
@@ -214,7 +290,7 @@ def main():
     parser = argparse.ArgumentParser(description="Gas Town LoRA training data pipeline")
     parser.add_argument("--sessions-dir", type=Path, default=DEFAULT_SESSIONS_DIR, help="Claude projects directory")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR, help="Output directory for datasets")
-    parser.add_argument("--step", choices=["all", "extract", "transform"], default="all", help="Pipeline step to run")
+    parser.add_argument("--step", choices=["all", "extract", "transform", "score"], default="all", help="Pipeline step to run")
     parser.add_argument("--verbose", "-v", action="store_true", help="Enable debug logging")
     args = parser.parse_args()
 

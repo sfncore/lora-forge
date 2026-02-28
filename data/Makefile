@@ -3,13 +3,16 @@
 PYTHON ?= python3
 OUTPUT_DIR ?= ../output/datasets
 
-all: extract transform validate validate-cli report stats
+all: extract transform validate validate-cli report stats score
 
 extract:
-	$(PYTHON) -m data.pipeline --step extract --output-dir $(OUTPUT_DIR)
+	cd .. && $(PYTHON) -m data.pipeline --step extract --output-dir $(OUTPUT_DIR)
 
 transform:
-	$(PYTHON) -m data.pipeline --step transform --output-dir $(OUTPUT_DIR)
+	cd .. && $(PYTHON) -m data.pipeline --step transform --output-dir $(OUTPUT_DIR)
+
+score:
+	cd .. && $(PYTHON) -m data.pipeline --step all --output-dir $(OUTPUT_DIR)
 
 validate:
 	$(PYTHON) -m data.validate.schema $(OUTPUT_DIR)/gastown_train.jsonl

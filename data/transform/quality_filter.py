@@ -1,12 +1,10 @@
 """Filter low-quality training samples.
-
 Quality criteria:
   - Minimum turn count (skip trivially short sessions)
   - Remove startup boilerplate-only sessions
   - Remove sessions that are only error messages
   - Score sessions by signal density (tool use, substantive responses)
 """
-
 from __future__ import annotations
 
 import re
@@ -36,13 +34,75 @@ class QualityResult:
     keep: bool
     score: float  # 0.0 to 1.0
     reason: str = ""
+    outcome_score: float | None = None  # External scoring signal (-1 or None for unavailable)
 
 
-def assess_turns(turns: list[Turn]) -> QualityResult:
+def assess_turns(turns: list[Turn], outcome_score: float | None = None) -> QualityResult:
     """Assess the quality of a list of conversation turns.
 
-    Returns a QualityResult with keep=True/False and a quality score.
+    Args:
+        turns: List of conversation turns to assess.
+        outcome_score: Optional external scoring signal. If provided, used as primary
+                      quality score. If None, falls back to heuristic assessment.
+
+    Returns:
+        QualityResult with keep=True/False and a quality score.
     """
+    # Use outcome_score when available, heuristic fallback otherwise.
+    if outcome_score is not None:
+        # Use outcome_score as the quality score with same keep/reject logic as heuristic
+        score = outcome_score
+        if len(turns) < 2:
+            return QualityResult(
+                keep=False,
+                score=score,
+                reason="too few turns",
+                outcome_score=outcome_score,
+            )
+        # Count substantive turns (non-boilerplate).
+        substantive = 0
+        total_content_len = 0
+        tool_call_count = 0
+        tool_result_count = 0
+
+        for turn in turns:
+            content = turn.content.strip()
+            total_content_len += len(content)
+
+            if turn.role == "assistant":
+                if turn.tool_calls:
+                    tool_call_count += len(turn.tool_calls)
+                if not _is_boilerplate(content):
+                    substantive += 1
+            elif turn.role == "user":
+                if turn.tool_results:
+                    tool_result_count += len(turn.tool_results)
+                if not _is_boilerplate(content) and not content.startswith("<tool_result"):
+                    substantive += 1
+
+        if substantive < MIN_SUBSTANTIVE_TURNS:
+            return QualityResult(
+                keep=False,
+                score=score,
+                reason="too few substantive turns",
+                outcome_score=outcome_score,
+            )
+
+        if total_content_len < MIN_CONTENT_LENGTH:
+            return QualityResult(
+                keep=False,
+                score=score,
+                reason="content too short",
+                outcome_score=outcome_score,
+            )
+
+        return QualityResult(
+            keep=True,
+            score=round(score, 3),
+            outcome_score=outcome_score,
+        )
+
+    # Heuristic fallback - compute score from signal density.
     if len(turns) < 2:
         return QualityResult(keep=False, score=0.0, reason="too few turns")
 
