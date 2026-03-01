@@ -15,6 +15,9 @@ lora_target_linear: true
 datasets:
   - path: output/datasets/mayor_train.jsonl
     type: sharegpt
+  - path: output/datasets/mayor_val.jsonl
+    type: sharegpt
+    conversation: chatml
     conversation: chatml
 
 dataset_prepared_path: output/datasets/prepared_mayor
