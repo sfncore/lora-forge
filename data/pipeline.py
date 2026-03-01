@@ -24,6 +24,7 @@ from data.transform.deduplicator import deduplicate
 from data.transform.quality_filter import assess_turns
 from data.transform.role_tagger import tag_role
 from data.transform.secret_scrubber import scrub_sample
+from data.transform.session_linker import SessionLinker
 from data.transform.session_scorer import score_session
 from data.transform.tool_normalizer import normalize_turn_content
 
@@ -201,7 +202,25 @@ def run_pipeline(
                 f.write(json.dumps(record) + "\n")
 
         logger.info("Extracted %d sessions, %d total turns", stats["sessions_extracted"], stats["total_turns"])
-    
+
+        # Link OTel signals into session metadata before scoring/transform.
+        linker = SessionLinker()
+        linked_count = 0
+        for s in sessions:
+            sid = s.metadata.get("gt_session") or s.session_id
+            try:
+                link_result = linker.link_session(sid)
+                otel_signals = link_result.get("otel_signals", {})
+                if otel_signals:
+                    s.metadata["otel_signals"] = otel_signals
+                    linked_count += 1
+                if link_result.get("bead_id"):
+                    s.metadata["bead_id"] = link_result["bead_id"]
+            except Exception as e:
+                logger.debug("Failed to link session %s: %s", sid, e)
+        stats["sessions_linked"] = linked_count
+        logger.info("Linked OTel signals for %d/%d sessions", linked_count, len(sessions))
+
     # Step 2: Score-only (separate scoring mode)
     if step == "score":
         return score_all(sessions_dir, output_dir)
