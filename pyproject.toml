@@ -22,6 +22,10 @@ gpu = [
     "wandb>=0.16.0",
     "flash-attn>=2.5.0",
 ]
+optuna = [
+    "optuna>=3.5.0",
+    "pyyaml>=6.0",
+]
 
 [build-system]
 requires = ["hatchling"]

@@ -35,6 +35,12 @@ Thumbs.db
 # WandB
 wandb/
 
+# Optuna
+optuna_studies.db
+
+# Eval output
+output/eval/
+
 # Gas Town rig management
 .repo.git/
 .land-worktree/
