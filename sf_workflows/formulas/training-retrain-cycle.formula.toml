@@ -27,147 +27,143 @@ type = "workflow"
 version = 1
 
 [[steps]]
-id = "regenerate-data"
-title = "Regenerate training datasets"
-description = """
-Run the full data pipeline from scratch.
+id = "extract-sessions"
+title = "Extract sessions"
+description = """"
+Run the data extraction pipeline to get raw session data.
 
 ```bash
-cd ~/gt/lora_forge/mayor/rig
-python3 -m data.pipeline --step all
+make -C data extract
 ```
 
-This extracts from all current Claude sessions, applies transforms,
-scrubs secrets, deduplicates, and produces fresh per-role datasets.
-
-**Compare to previous run:**
-- Sample count change per role
-- New sessions discovered
-- Secrets scrubbed
-- Quality score distribution shift
-
-**Output:** Fresh datasets in output/datasets/
+**Output:** Raw session data in data/extracted/
 """
-acceptance = "Pipeline completed, fresh datasets generated, comparison to previous run reported"
-
+acceptance = "Sessions extracted successfully"
 [[steps]]
-id = "score-outcomes"
-title = "Score sessions with bead outcomes"
-needs = ["regenerate-data"]
-description = """
-Run the training-score-sessions formula to enrich with outcome scores.
+id = "score-sessions"
+title = "Score sessions"
+needs = ["extract-sessions"]
+expansion = "training-score-sessions"
+description = """"
+Invoke training-score-sessions as an expansion to score the extracted sessions.
 
-```bash
-gt formula run training-score-sessions --var scope="all"
-```
+This embeds the B.1 formula directly into this workflow at step 2.
 
-This links sessions to beads and scores based on lifecycle outcomes.
-
-**Output:** Outcome scores applied to training datasets.
+**Output:** Sessions scored with outcome scores applied to training datasets.
 """
 acceptance = "All sessions scored, score report generated"
 
 [[steps]]
-id = "curate"
+id = "apply-curation-policy"
 title = "Apply curation policy"
-needs = ["score-outcomes"]
-description = """
-Apply the curation policy for this training version.
+needs = ["score-sessions"]
+description = """"
+Apply curation policy based on session scores.
 
-**Policy options (set via {{curation_policy}}):**
-- `none` — use all data as-is (Phase 1 default)
-- `exclude_failures` — drop samples with outcome_score < 0.3
-- `agent_review` — run training-curate-with-agents for each role
-- `full` — agent review + human spot-check + exclude failures
+**Policy options (set via {{score_threshold}}):**
+- Keep samples with outcome_score >= {{score_threshold}}
+- Exclude samples below threshold
+- Downweight samples based on score
 
-For v1: use `none` (learn the vocabulary first)
-For v2+: use `exclude_failures` or `agent_review`
-
-**Output:** Curated datasets ready for training.
+**Output:** Curated datasets ready for transformation.
 """
 acceptance = "Curation policy applied, curated datasets ready"
 
 [[steps]]
-id = "train"
-title = "Train {{version}} adapters for {{roles}}"
-needs = ["curate"]
-description = """
-Train LoRA adapters for each specified role.
+id = "format-for-axolotl"
+title = "Format for Axolotl"
+needs = ["apply-curation-policy"]
+description = """"
+Transform curated data into Axolotl-compatible format.
 
-**For each role in {{roles}}:**
-1. Verify sufficient data (minimum 50 samples after curation)
-2. Sync data to GPU: `scripts/sync_data.sh`
-3. Launch training: `axolotl train configs/roles/<role>.yml`
-4. Monitor via WandB: loss curve, eval metrics
-5. Pull adapter: `scripts/pull_adapter.sh`
+```bash
+make -C data transform
+```
 
-**Roles with < 50 samples** after curation: skip and report.
-Consider merging small roles into the all-roles adapter instead.
+**Output:** Formatted datasets in data/transformed/
+"""
+acceptance = "Data transformed to Axolotl format successfully"
+
+[[steps]]
+id = "validate-data"
+title = "Validate"
+needs = ["format-for-axolotl"]
+description = """"
+Validate the transformed training data for quality and consistency.
+
+```bash
+make -C data validate
+```
+
+**Output:** Validation report confirming data quality.
+"""
+acceptance = "Data validation passed, validation report generated"
+
+[[steps]]
+id = "train-adapters"
+title = "Train per-role adapter"
+needs = ["validate-data"]
+description = """"
+Train LoRA adapters for each specified role using Axolotl.
+
+For each role in {{roles}}:
+1. Verify sufficient data after curation
+2. Train adapter: `axolotl train configs/roles/{role}.yml`
+3. Monitor training metrics
 
 **Expected time:** ~30-60 min per role on A100.
 
-**Output:** Adapters in output/adapters/<role>-{{version}}/
+**Output:** Adapters in {{adapter_output_path}}/
 """
-acceptance = "All role adapters trained, WandB runs complete"
+acceptance = "All role adapters trained successfully"
+
 
 [[steps]]
-id = "evaluate"
-title = "Evaluate {{version}} adapters"
-needs = ["train"]
-description = """
-Run evaluation benchmarks against trained adapters.
+id = "evaluate-adapters"
+title = "Eval against baseline"
+needs = ["train-adapters"]
+description = """"
+Evaluate trained adapters against baseline using role_bench.
 
-**For each trained adapter:**
+For each trained adapter:
 1. Load base model + adapter
 2. Run role_bench with role-specific scenarios
-3. Compare against:
-   - Base model (no adapter) — measures improvement
-   - Previous adapter version — measures progress
-4. Score: behavior match rate, tool call accuracy, response quality
+3. Compare against base model and previous versions
 
-```bash
-python3 -m eval.role_bench --model output/adapters/<role>-{{version}}
-```
-
-**Decision gate:**
-- If {{version}} scores > previous version on all roles: proceed to deploy
-- If regression on any role: investigate, consider rolling back that role
-- Report regressions with specific scenario failures
-
-**Output:** Eval report with comparison tables.
+**Output:** Evaluation report with comparison metrics.
 """
-acceptance = "All adapters evaluated, comparison to baseline and previous version complete"
+acceptance = "All adapters evaluated, comparison report generated"
 
 [[steps]]
-id = "report"
-title = "Retrain cycle report"
-needs = ["evaluate"]
-description = """
-Generate comprehensive retraining report.
+id = "report-results"
+title = "Report results"
+needs = ["evaluate-adapters"]
+description = """"
+Generate comprehensive retraining cycle report.
 
 **Report sections:**
-1. Data summary: samples per role, new data since last train, secrets scrubbed
+1. Data summary: samples per role, new data since last train
 2. Scoring summary: outcome score distribution, curation decisions
-3. Training summary: per-role training metrics (final loss, epochs, time)
-4. Evaluation summary: per-role scores, improvement/regression vs baseline
-5. Recommendation: deploy? retrain with different params? collect more data?
-6. Next steps: what to focus on for {{version}}+1
+3. Training summary: per-role training metrics
+4. Evaluation summary: per-role scores, improvement vs baseline
+5. Recommendation: deploy? retrain? collect more data?
 
-**Output:** `sf_workflows/reports/retrain-{{version}}-<date>.md`
-
-**Notify:** `gt mail send mayor` with summary and recommendation.
+**Output:** `sf_workflows/reports/retrain-{{role}}-<date>.md`
 """
-acceptance = "Report written, mayor notified with recommendation"
-
+acceptance = "Report written with comprehensive results and recommendations"
 [vars]
-[vars.version]
-description = "Version tag for this training cycle (v1, v2, etc.)"
-required = true
+[vars.role]
+description = "Role to train adapter for"
+default = "polecat"
 
-[vars.roles]
-description = "Comma-separated roles to train (default: all roles with 50+ samples)"
-default = "mayor,deacon,witness,refinery,polecat,crew"
+[vars.gpu_budget]
+description = "GPU budget allocation for training"
+default = "1"
 
-[vars.curation_policy]
-description = "Curation policy: none, exclude_failures, agent_review, full"
-default = "none"
+[vars.score_threshold]
+description = "Minimum score threshold for curation"
+default = "0.3"
+
+[vars.adapter_output_path]
+description = "Path where trained adapters should be saved"
+default = "output/adapters"
