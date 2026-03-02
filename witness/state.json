@@ -1,9 +1,9 @@
 {
-  "patrol_count": 39,
+  "patrol_count": 40,
   "extraordinary_action": false,
-  "last_patrol": "2026-03-02T11:45:00.000000",
+  "last_patrol": "2026-03-02T12:00:00.000000",
   "actions": [
-    "Patrol 39: ZOMBIE DETECTION - All 6 polecats are zombies (sessions dead, worktrees corrupted). Deacon+Refinery healthy. Dog dispatch requested for worktree recreation. Inbox clean, no timer gates, no swarm.",
-    "Patrol 38: All systems healthy - Deacon+Refinery running, 6 polecats clean, no timer gates, no swarm."
+    "Patrol 40: Polecats in transition - agent beads removed, awaiting Dog recreation. Directories exist but empty. Deacon+Refinery healthy. Inbox clean, no timer gates, no swarm.",
+    "Patrol 39: ZOMBIE DETECTION - All 6 polecats are zombies (sessions dead, worktrees corrupted). Deacon+Refinery healthy. Dog dispatch requested for worktree recreation. Inbox clean, no timer gates, no swarm."
   ]
 }
