@@ -49,6 +49,8 @@
 {"created_at":"2026-02-24T16:45:11Z","created_by":"mayor","depends_on_id":"lf-wisp-wisp-mufl","issue_id":"lf-8gt","type":"blocks"}
 {"created_at":"2026-02-24T16:41:35Z","created_by":"mayor","depends_on_id":"lf-x28","issue_id":"lf-8gt","type":"parent-child"}
 {"created_at":"2026-02-28T14:07:49Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-1ytl","issue_id":"lf-8kue","type":"blocks"}
+{"created_at":"2026-03-02T12:52:55Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-7jsq","issue_id":"lf-8mcv","type":"parent-child"}
+{"created_at":"2026-03-02T12:51:26Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-qrfk","issue_id":"lf-8mcv","type":"blocks"}
 {"created_at":"2026-02-24T16:41:35Z","created_by":"mayor","depends_on_id":"lf-x28","issue_id":"lf-dgd","type":"parent-child"}
 {"created_at":"2026-02-27T05:07:50Z","created_by":"mayor","depends_on_id":"lf-wisp-wisp-s1goo","issue_id":"lf-epgu","type":"blocks"}
 {"created_at":"2026-02-28T16:11:11Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-gbks","issue_id":"lf-gbks.1","type":"parent-child"}
@@ -247,7 +249,10 @@
 {"created_at":"2026-02-28T14:09:17Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-1vz4","issue_id":"lf-n5sm","type":"blocks"}
 {"created_at":"2026-02-28T14:08:43Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-4u0c","issue_id":"lf-nnhp","type":"blocks"}
 {"created_at":"2026-02-28T14:08:43Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-8kue","issue_id":"lf-nnhp","type":"blocks"}
+{"created_at":"2026-03-02T12:52:55Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-7jsq","issue_id":"lf-p0ln","type":"parent-child"}
+{"created_at":"2026-03-02T12:51:25Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-qrfk","issue_id":"lf-p0ln","type":"blocks"}
 {"created_at":"2026-02-28T14:08:43Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-nnhp","issue_id":"lf-q7rs","type":"blocks"}
+{"created_at":"2026-03-02T12:52:54Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-7jsq","issue_id":"lf-qrfk","type":"parent-child"}
 {"created_at":"2026-02-24T18:58:19Z","created_by":"lora_forge/witness","depends_on_id":"lf-wisp-wisp-bvzjq","issue_id":"lf-rsve9","type":"parent-child"}
 {"created_at":"2026-02-28T14:08:21Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-z6aj","issue_id":"lf-uznx","type":"blocks"}
 {"created_at":"2026-02-24T16:41:21Z","created_by":"mayor","depends_on_id":"lf-dgd","issue_id":"lf-v4g","type":"blocks"}
@@ -257,8 +262,6 @@
 {"created_at":"2026-03-01T12:36:37Z","created_by":"mayor","depends_on_id":"lf-wisp-8d6yl","issue_id":"lf-wisp-03nq0","type":"blocks"}
 {"created_at":"2026-03-01T12:48:49Z","created_by":"mayor","depends_on_id":"lf-wisp-mpevn","issue_id":"lf-wisp-05sg9","type":"blocks"}
 {"created_at":"2026-02-27T07:15:04Z","created_by":"sfgastown/refinery","depends_on_id":"lf-wisp-rz8t6","issue_id":"lf-wisp-0bwex","type":"blocks"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-2ksyb","issue_id":"lf-wisp-0kevx","type":"blocks"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-aniax","issue_id":"lf-wisp-0kevx","type":"parent-child"}
 {"created_at":"2026-03-01T13:56:22Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-ywofp","issue_id":"lf-wisp-0kjws","type":"blocks"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-ds1ta","issue_id":"lf-wisp-0mhlv","type":"blocks"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-yjc8v","issue_id":"lf-wisp-0mhlv","type":"parent-child"}
@@ -273,8 +276,6 @@
 {"created_at":"2026-03-02T12:14:00Z","created_by":"refinery","depends_on_id":"lf-wisp-18xp7","issue_id":"lf-wisp-25ji5","type":"blocks"}
 {"created_at":"2026-03-02T12:14:00Z","created_by":"refinery","depends_on_id":"lf-wisp-9bhoc","issue_id":"lf-wisp-25ji5","type":"parent-child"}
 {"created_at":"2026-02-28T18:21:00Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-g9z03","issue_id":"lf-wisp-2b1up","type":"blocks"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-aniax","issue_id":"lf-wisp-2ksyb","type":"parent-child"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-uaglt","issue_id":"lf-wisp-2ksyb","type":"blocks"}
 {"created_at":"2026-03-01T13:59:52Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-vwmne","issue_id":"lf-wisp-2t0na","type":"blocks"}
 {"created_at":"2026-02-28T14:50:32Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-u8pj8","issue_id":"lf-wisp-3calt","type":"blocks"}
 {"created_at":"2026-03-02T11:10:39Z","created_by":"witness","depends_on_id":"lf-wisp-rqpy8","issue_id":"lf-wisp-3hq55","type":"blocks"}
@@ -283,30 +284,15 @@
 {"created_at":"2026-03-02T12:14:00Z","created_by":"refinery","depends_on_id":"lf-wisp-v40uw","issue_id":"lf-wisp-3rurb","type":"blocks"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-lu3s6","issue_id":"lf-wisp-3sd5g","type":"blocks"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-yjc8v","issue_id":"lf-wisp-3sd5g","type":"parent-child"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-51c6u","issue_id":"lf-wisp-3y9bt","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-wyl75","issue_id":"lf-wisp-3y9bt","type":"parent-child"}
-{"created_at":"2026-03-02T11:46:56Z","created_by":"witness","depends_on_id":"lf-wisp-kv0oz","issue_id":"lf-wisp-42k83","type":"blocks"}
-{"created_at":"2026-03-02T11:46:55Z","created_by":"witness","depends_on_id":"lf-wisp-wlhi5","issue_id":"lf-wisp-42k83","type":"parent-child"}
 {"created_at":"2026-03-01T13:59:52Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-puxgb","issue_id":"lf-wisp-4nyc7","type":"blocks"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-3h22o","issue_id":"lf-wisp-4qdft","type":"parent-child"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-6t2l0","issue_id":"lf-wisp-4qdft","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-gx4yw","issue_id":"lf-wisp-4zdj8","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-wyl75","issue_id":"lf-wisp-4zdj8","type":"parent-child"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-wyl75","issue_id":"lf-wisp-51c6u","type":"parent-child"}
-{"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-8r9yy","issue_id":"lf-wisp-52igf","type":"parent-child"}
 {"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-m5mxz","issue_id":"lf-wisp-52igf","type":"blocks"}
 {"created_at":"2026-03-02T11:10:39Z","created_by":"witness","depends_on_id":"lf-wisp-5vcfd","issue_id":"lf-wisp-5aqn7","type":"blocks"}
 {"created_at":"2026-02-28T14:37:20Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-xf9vy","issue_id":"lf-wisp-5bybh","type":"blocks"}
 {"created_at":"2026-03-02T11:10:39Z","created_by":"witness","depends_on_id":"lf-wisp-jo7b8","issue_id":"lf-wisp-5vcfd","type":"blocks"}
 {"created_at":"2026-03-02T11:10:39Z","created_by":"witness","depends_on_id":"lf-wisp-5aqn7","issue_id":"lf-wisp-5vhoz","type":"blocks"}
 {"created_at":"2026-02-27T07:15:04Z","created_by":"sfgastown/refinery","depends_on_id":"lf-wisp-m8vob","issue_id":"lf-wisp-6prho","type":"blocks"}
-{"created_at":"2026-03-02T11:46:56Z","created_by":"witness","depends_on_id":"lf-wisp-42k83","issue_id":"lf-wisp-6rab7","type":"blocks"}
-{"created_at":"2026-03-02T11:46:55Z","created_by":"witness","depends_on_id":"lf-wisp-wlhi5","issue_id":"lf-wisp-6rab7","type":"parent-child"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-3h22o","issue_id":"lf-wisp-6t2l0","type":"parent-child"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-ly1q0","issue_id":"lf-wisp-6t2l0","type":"blocks"}
 {"created_at":"2026-03-01T12:33:16Z","created_by":"mayor","depends_on_id":"lf-wisp-q8gi3","issue_id":"lf-wisp-6vt9m","type":"blocks"}
 {"created_at":"2026-02-28T14:43:40Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-0w517","issue_id":"lf-wisp-7fqxu","type":"blocks"}
-{"created_at":"2026-03-02T11:14:57Z","created_by":"witness","depends_on_id":"lf-wisp-8r9yy","issue_id":"lf-wisp-7mz03","type":"parent-child"}
 {"created_at":"2026-02-28T18:13:45Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-i2von","issue_id":"lf-wisp-80g0v","type":"parent-child"}
 {"created_at":"2026-02-28T18:13:45Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-ikt48","issue_id":"lf-wisp-80g0v","type":"blocks"}
 {"created_at":"2026-03-01T12:36:37Z","created_by":"mayor","depends_on_id":"lf-wisp-mm430","issue_id":"lf-wisp-8d6yl","type":"blocks"}
@@ -317,17 +303,6 @@
 {"created_at":"2026-03-01T12:36:37Z","created_by":"mayor","depends_on_id":"lf-wisp-lfr4x","issue_id":"lf-wisp-9cwg9","type":"blocks"}
 {"created_at":"2026-02-28T14:37:20Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-knfol","issue_id":"lf-wisp-9ieas","type":"blocks"}
 {"created_at":"2026-02-28T14:50:32Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-3calt","issue_id":"lf-wisp-9j7yv","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-9x8sa","issue_id":"lf-wisp-9pmm2","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-wyl75","issue_id":"lf-wisp-9pmm2","type":"parent-child"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-a4gdi","issue_id":"lf-wisp-9uznm","type":"blocks"}
-{"created_at":"2026-03-02T11:35:45Z","created_by":"witness","depends_on_id":"lf-wisp-aniax","issue_id":"lf-wisp-9uznm","type":"parent-child"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-3y9bt","issue_id":"lf-wisp-9x8sa","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-wyl75","issue_id":"lf-wisp-9x8sa","type":"parent-child"}
-{"created_at":"2026-03-02T11:35:45Z","created_by":"witness","depends_on_id":"lf-wisp-aniax","issue_id":"lf-wisp-a4gdi","type":"parent-child"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-eb0k4","issue_id":"lf-wisp-a4gdi","type":"blocks"}
-{"created_at":"2026-03-02T11:46:55Z","created_by":"witness","depends_on_id":"lf-wisp-wlhi5","issue_id":"lf-wisp-a5ais","type":"parent-child"}
-{"created_at":"2026-03-02T11:46:56Z","created_by":"witness","depends_on_id":"lf-wisp-zhx5k","issue_id":"lf-wisp-a5ais","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-vfvia","issue_id":"lf-wisp-ad3h1","type":"blocks"}
 {"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-wyl75","issue_id":"lf-wisp-ad3h1","type":"parent-child"}
 {"created_at":"2026-03-02T11:10:39Z","created_by":"witness","depends_on_id":"lf-wisp-3hq55","issue_id":"lf-wisp-apkav","type":"blocks"}
 {"created_at":"2026-02-28T18:21:00Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-2b1up","issue_id":"lf-wisp-av29a","type":"blocks"}
@@ -336,7 +311,6 @@
 {"created_at":"2026-02-28T18:13:45Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-i2von","issue_id":"lf-wisp-c706o","type":"parent-child"}
 {"created_at":"2026-03-01T12:48:50Z","created_by":"mayor","depends_on_id":"lf-wisp-k94oy","issue_id":"lf-wisp-cmgbs","type":"blocks"}
 {"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-7mz03","issue_id":"lf-wisp-d7cuy","type":"blocks"}
-{"created_at":"2026-03-02T11:14:57Z","created_by":"witness","depends_on_id":"lf-wisp-8r9yy","issue_id":"lf-wisp-d7cuy","type":"parent-child"}
 {"created_at":"2026-03-02T12:14:00Z","created_by":"refinery","depends_on_id":"lf-wisp-9bhoc","issue_id":"lf-wisp-dci30","type":"parent-child"}
 {"created_at":"2026-03-02T12:14:00Z","created_by":"refinery","depends_on_id":"lf-wisp-ft4t4","issue_id":"lf-wisp-dci30","type":"blocks"}
 {"created_at":"2026-02-28T14:43:40Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-7fqxu","issue_id":"lf-wisp-dlkth","type":"blocks"}
@@ -345,8 +319,6 @@
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-uledp","issue_id":"lf-wisp-dss6y","type":"blocks"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-yjc8v","issue_id":"lf-wisp-dss6y","type":"parent-child"}
 {"created_at":"2026-03-01T12:33:16Z","created_by":"mayor","depends_on_id":"lf-wisp-6vt9m","issue_id":"lf-wisp-e8xri","type":"blocks"}
-{"created_at":"2026-03-02T11:35:45Z","created_by":"witness","depends_on_id":"lf-wisp-aniax","issue_id":"lf-wisp-eb0k4","type":"parent-child"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-nqdj1","issue_id":"lf-wisp-eb0k4","type":"blocks"}
 {"created_at":"2026-03-01T10:50:49Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-1td9h","issue_id":"lf-wisp-eiu24","type":"blocks"}
 {"created_at":"2026-03-02T12:14:00Z","created_by":"refinery","depends_on_id":"lf-wisp-9bhoc","issue_id":"lf-wisp-em3cg","type":"parent-child"}
 {"created_at":"2026-03-02T12:14:01Z","created_by":"refinery","depends_on_id":"lf-wisp-tpmot","issue_id":"lf-wisp-em3cg","type":"blocks"}
@@ -359,14 +331,9 @@
 {"created_at":"2026-03-01T12:36:37Z","created_by":"mayor","depends_on_id":"lf-wisp-03nq0","issue_id":"lf-wisp-fspvf","type":"blocks"}
 {"created_at":"2026-03-02T12:14:00Z","created_by":"refinery","depends_on_id":"lf-wisp-25ji5","issue_id":"lf-wisp-ft4t4","type":"blocks"}
 {"created_at":"2026-03-02T12:14:00Z","created_by":"refinery","depends_on_id":"lf-wisp-9bhoc","issue_id":"lf-wisp-ft4t4","type":"parent-child"}
-{"created_at":"2026-03-02T11:46:56Z","created_by":"witness","depends_on_id":"lf-wisp-a5ais","issue_id":"lf-wisp-g7kgf","type":"blocks"}
-{"created_at":"2026-03-02T11:46:56Z","created_by":"witness","depends_on_id":"lf-wisp-wlhi5","issue_id":"lf-wisp-g7kgf","type":"parent-child"}
 {"created_at":"2026-02-28T18:21:00Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-qkx6l","issue_id":"lf-wisp-g9z03","type":"blocks"}
 {"created_at":"2026-03-01T12:48:49Z","created_by":"mayor","depends_on_id":"lf-wisp-3jb3p","issue_id":"lf-wisp-gax71","type":"blocks"}
 {"created_at":"2026-03-01T13:56:22Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-r7ieu","issue_id":"lf-wisp-gug3q","type":"blocks"}
-{"created_at":"2026-03-02T11:46:55Z","created_by":"witness","depends_on_id":"lf-wisp-wlhi5","issue_id":"lf-wisp-gvbov","type":"parent-child"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-9pmm2","issue_id":"lf-wisp-gx4yw","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-wyl75","issue_id":"lf-wisp-gx4yw","type":"parent-child"}
 {"created_at":"2026-03-01T13:56:22Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-gug3q","issue_id":"lf-wisp-hnjgt","type":"blocks"}
 {"created_at":"2026-03-01T10:50:49Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-h96wi","issue_id":"lf-wisp-hnogk","type":"blocks"}
 {"created_at":"2026-03-02T12:14:01Z","created_by":"refinery","depends_on_id":"lf-wisp-8kjso","issue_id":"lf-wisp-hqol6","type":"blocks"}
@@ -374,8 +341,6 @@
 {"created_at":"2026-02-28T18:13:45Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-uznx","issue_id":"lf-wisp-i2von","type":"blocks"}
 {"created_at":"2026-02-28T18:13:45Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-c706o","issue_id":"lf-wisp-i6ikg","type":"blocks"}
 {"created_at":"2026-02-28T18:13:45Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-i2von","issue_id":"lf-wisp-i6ikg","type":"parent-child"}
-{"created_at":"2026-03-02T11:46:56Z","created_by":"witness","depends_on_id":"lf-wisp-6rab7","issue_id":"lf-wisp-i9xev","type":"blocks"}
-{"created_at":"2026-03-02T11:46:55Z","created_by":"witness","depends_on_id":"lf-wisp-wlhi5","issue_id":"lf-wisp-i9xev","type":"parent-child"}
 {"created_at":"2026-02-28T18:13:45Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-i2von","issue_id":"lf-wisp-ikt48","type":"parent-child"}
 {"created_at":"2026-02-28T18:21:00Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-av29a","issue_id":"lf-wisp-inwmw","type":"blocks"}
 {"created_at":"2026-02-28T14:37:20Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-5bybh","issue_id":"lf-wisp-it8h4","type":"blocks"}
@@ -390,28 +355,19 @@
 {"created_at":"2026-02-28T14:37:20Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-9ieas","issue_id":"lf-wisp-jlh9a","type":"blocks"}
 {"created_at":"2026-03-02T11:10:39Z","created_by":"witness","depends_on_id":"lf-wisp-0jg34","issue_id":"lf-wisp-jo7b8","type":"blocks"}
 {"created_at":"2026-03-01T10:50:49Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-oy5u1","issue_id":"lf-wisp-jsjp2","type":"blocks"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-3h22o","issue_id":"lf-wisp-k00e3","type":"parent-child"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-p96vl","issue_id":"lf-wisp-k00e3","type":"blocks"}
-{"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-8r9yy","issue_id":"lf-wisp-k2t0h","type":"parent-child"}
 {"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-u917h","issue_id":"lf-wisp-k2t0h","type":"blocks"}
 {"created_at":"2026-03-01T12:48:49Z","created_by":"mayor","depends_on_id":"lf-wisp-bpvho","issue_id":"lf-wisp-k94oy","type":"blocks"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-jkj0z","issue_id":"lf-wisp-khuin","type":"blocks"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-yjc8v","issue_id":"lf-wisp-khuin","type":"parent-child"}
 {"created_at":"2026-02-28T14:37:20Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-v32ok","issue_id":"lf-wisp-knfol","type":"blocks"}
 {"created_at":"2026-03-02T11:10:39Z","created_by":"witness","depends_on_id":"lf-wisp-5vhoz","issue_id":"lf-wisp-ksrjz","type":"blocks"}
-{"created_at":"2026-03-02T11:46:56Z","created_by":"witness","depends_on_id":"lf-wisp-gvbov","issue_id":"lf-wisp-kv0oz","type":"blocks"}
-{"created_at":"2026-03-02T11:46:55Z","created_by":"witness","depends_on_id":"lf-wisp-wlhi5","issue_id":"lf-wisp-kv0oz","type":"parent-child"}
 {"created_at":"2026-03-01T10:50:49Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-eykx0","issue_id":"lf-wisp-lbxjd","type":"blocks"}
 {"created_at":"2026-02-28T14:50:32Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-9j7yv","issue_id":"lf-wisp-ldiz8","type":"blocks"}
 {"created_at":"2026-02-28T14:50:32Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-u89uk","issue_id":"lf-wisp-ldqnk","type":"blocks"}
 {"created_at":"2026-03-01T12:36:37Z","created_by":"mayor","depends_on_id":"lf-wisp-fspvf","issue_id":"lf-wisp-lfr4x","type":"blocks"}
-{"created_at":"2026-03-02T11:46:56Z","created_by":"witness","depends_on_id":"lf-wisp-g7kgf","issue_id":"lf-wisp-lr1ix","type":"blocks"}
 {"created_at":"2026-03-02T11:46:56Z","created_by":"witness","depends_on_id":"lf-wisp-wlhi5","issue_id":"lf-wisp-lr1ix","type":"parent-child"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-ixfqn","issue_id":"lf-wisp-lu3s6","type":"blocks"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-yjc8v","issue_id":"lf-wisp-lu3s6","type":"parent-child"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-3h22o","issue_id":"lf-wisp-ly1q0","type":"parent-child"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-k00e3","issue_id":"lf-wisp-ly1q0","type":"blocks"}
-{"created_at":"2026-03-02T11:14:57Z","created_by":"witness","depends_on_id":"lf-wisp-8r9yy","issue_id":"lf-wisp-m5mxz","type":"parent-child"}
 {"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-z6gzk","issue_id":"lf-wisp-m5mxz","type":"blocks"}
 {"created_at":"2026-02-27T07:15:04Z","created_by":"sfgastown/refinery","depends_on_id":"lf-wisp-ni5jn","issue_id":"lf-wisp-m8vob","type":"blocks"}
 {"created_at":"2026-03-01T13:56:22Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-hnjgt","issue_id":"lf-wisp-mi1yw","type":"blocks"}
@@ -424,15 +380,8 @@
 {"created_at":"2026-03-02T12:14:01Z","created_by":"refinery","depends_on_id":"lf-wisp-hqol6","issue_id":"lf-wisp-mppty","type":"blocks"}
 {"created_at":"2026-02-28T14:50:32Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-ldiz8","issue_id":"lf-wisp-mvh8r","type":"blocks"}
 {"created_at":"2026-02-27T07:15:04Z","created_by":"sfgastown/refinery","depends_on_id":"lf-wisp-8prf2","issue_id":"lf-wisp-ni5jn","type":"blocks"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-3h22o","issue_id":"lf-wisp-njn47","type":"parent-child"}
-{"created_at":"2026-03-02T11:35:45Z","created_by":"witness","depends_on_id":"lf-wisp-aniax","issue_id":"lf-wisp-nqdj1","type":"parent-child"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-nsxip","issue_id":"lf-wisp-nqdj1","type":"blocks"}
-{"created_at":"2026-03-02T11:35:45Z","created_by":"witness","depends_on_id":"lf-wisp-aniax","issue_id":"lf-wisp-nsxip","type":"parent-child"}
 {"created_at":"2026-03-01T13:56:22Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-fongd","issue_id":"lf-wisp-oe4mn","type":"blocks"}
 {"created_at":"2026-03-01T10:50:49Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-hnogk","issue_id":"lf-wisp-oy5u1","type":"blocks"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-3h22o","issue_id":"lf-wisp-p96vl","type":"parent-child"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-njn47","issue_id":"lf-wisp-p96vl","type":"blocks"}
-{"created_at":"2026-03-02T11:14:57Z","created_by":"witness","depends_on_id":"lf-wisp-8r9yy","issue_id":"lf-wisp-pj2dp","type":"parent-child"}
 {"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-d7cuy","issue_id":"lf-wisp-pj2dp","type":"blocks"}
 {"created_at":"2026-03-01T13:59:52Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-qyho0","issue_id":"lf-wisp-puxgb","type":"blocks"}
 {"created_at":"2026-03-01T12:42:32Z","created_by":"mayor","depends_on_id":"lf-wisp-zl9hs","issue_id":"lf-wisp-q7w43","type":"blocks"}
@@ -445,31 +394,18 @@
 {"created_at":"2026-03-01T13:59:52Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-rik9e","issue_id":"lf-wisp-rtgjx","type":"blocks"}
 {"created_at":"2026-02-28T18:21:00Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-inwmw","issue_id":"lf-wisp-sr9mf","type":"blocks"}
 {"created_at":"2026-02-28T14:43:40Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-etlk6","issue_id":"lf-wisp-tedn0","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-4zdj8","issue_id":"lf-wisp-tkuh7","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-wyl75","issue_id":"lf-wisp-tkuh7","type":"parent-child"}
 {"created_at":"2026-03-02T12:14:00Z","created_by":"refinery","depends_on_id":"lf-wisp-9bhoc","issue_id":"lf-wisp-tpmot","type":"parent-child"}
 {"created_at":"2026-03-02T12:14:01Z","created_by":"refinery","depends_on_id":"lf-wisp-mppty","issue_id":"lf-wisp-tpmot","type":"blocks"}
 {"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-3h22o","issue_id":"lf-wisp-tvsag","type":"parent-child"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-u0r6a","issue_id":"lf-wisp-tvsag","type":"blocks"}
 {"created_at":"2026-03-02T12:14:00Z","created_by":"refinery","depends_on_id":"lf-wisp-3rurb","issue_id":"lf-wisp-txn6j","type":"blocks"}
 {"created_at":"2026-03-02T12:14:00Z","created_by":"refinery","depends_on_id":"lf-wisp-9bhoc","issue_id":"lf-wisp-txn6j","type":"parent-child"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-0kevx","issue_id":"lf-wisp-tylat","type":"blocks"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-aniax","issue_id":"lf-wisp-tylat","type":"parent-child"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-3h22o","issue_id":"lf-wisp-u0r6a","type":"parent-child"}
-{"created_at":"2026-03-02T12:11:22Z","created_by":"witness","depends_on_id":"lf-wisp-4qdft","issue_id":"lf-wisp-u0r6a","type":"blocks"}
 {"created_at":"2026-02-28T14:50:32Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-j6qek","issue_id":"lf-wisp-u8pj8","type":"blocks"}
 {"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-52igf","issue_id":"lf-wisp-u917h","type":"blocks"}
-{"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-8r9yy","issue_id":"lf-wisp-u917h","type":"parent-child"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-9uznm","issue_id":"lf-wisp-uaglt","type":"blocks"}
-{"created_at":"2026-03-02T11:35:46Z","created_by":"witness","depends_on_id":"lf-wisp-aniax","issue_id":"lf-wisp-uaglt","type":"parent-child"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-ew717","issue_id":"lf-wisp-uledp","type":"blocks"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-yjc8v","issue_id":"lf-wisp-uledp","type":"parent-child"}
 {"created_at":"2026-02-28T14:37:20Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-rvcem","issue_id":"lf-wisp-v32ok","type":"blocks"}
 {"created_at":"2026-03-02T12:13:57Z","created_by":"refinery","depends_on_id":"lf-wisp-9bhoc","issue_id":"lf-wisp-v40uw","type":"parent-child"}
 {"created_at":"2026-02-27T07:15:04Z","created_by":"sfgastown/refinery","depends_on_id":"lf-wisp-6prho","issue_id":"lf-wisp-v6jmm","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-tkuh7","issue_id":"lf-wisp-vfvia","type":"blocks"}
-{"created_at":"2026-03-02T11:57:46Z","created_by":"witness","depends_on_id":"lf-wisp-wyl75","issue_id":"lf-wisp-vfvia","type":"parent-child"}
-{"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-8r9yy","issue_id":"lf-wisp-vno04","type":"parent-child"}
 {"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-k2t0h","issue_id":"lf-wisp-vno04","type":"blocks"}
 {"created_at":"2026-03-01T13:59:52Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-4nyc7","issue_id":"lf-wisp-vwmne","type":"blocks"}
 {"created_at":"2026-03-01T12:42:32Z","created_by":"mayor","depends_on_id":"lf-wisp-f5sz8","issue_id":"lf-wisp-w9131","type":"blocks"}
@@ -1360,10 +1296,7 @@
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-3sd5g","issue_id":"lf-wisp-yfstb","type":"blocks"}
 {"created_at":"2026-03-02T11:10:08Z","created_by":"refinery","depends_on_id":"lf-wisp-yjc8v","issue_id":"lf-wisp-yfstb","type":"parent-child"}
 {"created_at":"2026-03-01T13:56:22Z","created_by":"Polecat Obsidian","depends_on_id":"lf-wisp-mi1yw","issue_id":"lf-wisp-ywofp","type":"blocks"}
-{"created_at":"2026-03-02T11:14:57Z","created_by":"witness","depends_on_id":"lf-wisp-8r9yy","issue_id":"lf-wisp-z6gzk","type":"parent-child"}
 {"created_at":"2026-03-02T11:14:58Z","created_by":"witness","depends_on_id":"lf-wisp-pj2dp","issue_id":"lf-wisp-z6gzk","type":"blocks"}
-{"created_at":"2026-03-02T11:46:56Z","created_by":"witness","depends_on_id":"lf-wisp-i9xev","issue_id":"lf-wisp-zhx5k","type":"blocks"}
-{"created_at":"2026-03-02T11:46:55Z","created_by":"witness","depends_on_id":"lf-wisp-wlhi5","issue_id":"lf-wisp-zhx5k","type":"parent-child"}
 {"created_at":"2026-03-01T12:42:32Z","created_by":"mayor","depends_on_id":"lf-wisp-mku9h","issue_id":"lf-wisp-zl9hs","type":"blocks"}
 {"created_at":"2026-02-28T18:13:45Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-1wjv9","issue_id":"lf-wisp-zt5di","type":"blocks"}
 {"created_at":"2026-02-28T18:13:45Z","created_by":"lora_forge/crew/forge","depends_on_id":"lf-wisp-i2von","issue_id":"lf-wisp-zt5di","type":"parent-child"}
