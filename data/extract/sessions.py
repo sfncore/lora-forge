@@ -282,11 +282,7 @@ def _extract_assistant_turn(records: list[dict]) -> Turn | None:
                     text_parts.append(text)
 
             elif block_type == "tool_use":
-                tool_call = {
-                    "id": block.get("id", ""),
-                    "name": block.get("name", ""),
-                    "input": block.get("input", {}),
-                }
+                tool_call = _classify_tool_call(block)
                 tool_calls.append(tool_call)
                 # Format tool call as part of content.
                 text_parts.append(_format_tool_call(tool_call))
@@ -308,12 +304,40 @@ def _extract_assistant_turn(records: list[dict]) -> Turn | None:
     )
 
 
+def _classify_tool_call(block: dict) -> dict:
+    """Extract and classify a tool_use block by source.
+
+    MCP tool names follow the pattern ``mcp__<server>__<tool>``.
+    Returns a dict with id, name, input, plus source and mcp_server fields.
+    """
+    name = block.get("name", "")
+    result = {
+        "id": block.get("id", ""),
+        "name": name,
+        "input": block.get("input", {}),
+    }
+
+    if name.startswith("mcp__"):
+        parts = name.split("__", 2)
+        result["source"] = "mcp"
+        result["mcp_server"] = parts[1] if len(parts) >= 2 else "unknown"
+    else:
+        result["source"] = "standard"
+        result["mcp_server"] = ""
+
+    return result
+
+
 def _format_tool_call(tool_call: dict) -> str:
     """Format a tool call as an XML-tagged string for training data."""
-    # Compact JSON for the arguments.
     args_json = json.dumps(tool_call.get("input", {}), ensure_ascii=False, separators=(",", ":"))
     name = tool_call.get("name", "unknown")
-    return f'<tool_call name="{name}">\n{args_json}\n</tool_call>'
+    source = tool_call.get("source", "standard")
+    attrs = f'name="{name}" source="{source}"'
+    mcp_server = tool_call.get("mcp_server", "")
+    if mcp_server:
+        attrs += f' mcp_server="{mcp_server}"'
+    return f"<tool_call {attrs}>\n{args_json}\n</tool_call>"
 
 
 def discover_sessions(base_dir: Path, pattern: str = "-home-ubuntu-gt-*") -> list[Path]:
