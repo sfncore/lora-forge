@@ -87,6 +87,8 @@ def format_sharegpt(
     chunk_index: int = 0,
     quality_score: float = 0.0,
     source: str = "claude-session",
+    runtime_type: str = "unknown",
+    mcp_servers: list[str] | None = None,
 ) -> dict:
     """Format a list of turns into Axolotl's sharegpt format.
 
@@ -116,6 +118,8 @@ def format_sharegpt(
             "chunk_index": chunk_index,
             "quality_score": quality_score,
             "source": source,
+            "runtime_type": runtime_type,
+            "mcp_servers": mcp_servers or [],
         },
     }
 

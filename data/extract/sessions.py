@@ -2,7 +2,7 @@
 
 Each session JSONL file contains records of types:
   - file-history-snapshot: skip
-  - progress: skip (hook_progress, bash_progress)
+  - progress: scanned for mcp_progress events (runtime detection), otherwise skip
   - summary: skip
   - user: training data — content is str (human) or list[tool_result]
   - assistant: training data — content is list of {thinking, text, tool_use} blocks
@@ -46,7 +46,41 @@ class ExtractedSession:
     source_path: str
     cwd: str = ""
     turns: list[Turn] = field(default_factory=list)
+    runtime_type: str = "unknown"  # claudecode, claudecode-nvim, claudecode-mcp
+    mcp_servers: list[str] = field(default_factory=list)  # MCP servers used in session
     metadata: dict = field(default_factory=dict)
+
+
+def _detect_runtime_type(records: list[dict]) -> tuple[str, list[str]]:
+    """Detect runtime type from MCP progress events in session records.
+
+    Scans progress records for mcp_progress events and classifies:
+      - "claudecode-nvim": prism-nvim MCP server present (Neovim-embedded)
+      - "claudecode-mcp": other MCP servers present but not prism-nvim
+      - "claudecode": no MCP servers detected (standard CLI)
+
+    Returns:
+        (runtime_type, sorted list of unique MCP server names)
+    """
+    mcp_servers: set[str] = set()
+
+    for rec in records:
+        if rec.get("type") != "progress":
+            continue
+        data = rec.get("data", {})
+        if data.get("type") != "mcp_progress":
+            continue
+        server_name = data.get("serverName", "")
+        if server_name:
+            mcp_servers.add(server_name)
+
+    servers_list = sorted(mcp_servers)
+
+    if not mcp_servers:
+        return "claudecode", servers_list
+    if "prism-nvim" in mcp_servers:
+        return "claudecode-nvim", servers_list
+    return "claudecode-mcp", servers_list
 
 
 def extract_session(session_path: Path) -> ExtractedSession | None:
@@ -57,6 +91,9 @@ def extract_session(session_path: Path) -> ExtractedSession | None:
     records = _load_records(session_path)
     if not records:
         return None
+
+    # Detect runtime type from MCP progress events.
+    runtime_type, mcp_servers = _detect_runtime_type(records)
 
     session_id = ""
     cwd = ""
@@ -132,9 +169,13 @@ def extract_session(session_path: Path) -> ExtractedSession | None:
         source_path=str(session_path),
         cwd=cwd,
         turns=turns,
+        runtime_type=runtime_type,
+        mcp_servers=mcp_servers,
         metadata={
             "total_records": len(records),
             "conversation_records": len(user_records) + sum(len(g) for g in assistant_groups.values()),
+            "runtime_type": runtime_type,
+            "mcp_servers": mcp_servers,
         },
     )
 
@@ -241,11 +282,7 @@ def _extract_assistant_turn(records: list[dict]) -> Turn | None:
                     text_parts.append(text)
 
             elif block_type == "tool_use":
-                tool_call = {
-                    "id": block.get("id", ""),
-                    "name": block.get("name", ""),
-                    "input": block.get("input", {}),
-                }
+                tool_call = _classify_tool_call(block)
                 tool_calls.append(tool_call)
                 # Format tool call as part of content.
                 text_parts.append(_format_tool_call(tool_call))
@@ -267,12 +304,40 @@ def _extract_assistant_turn(records: list[dict]) -> Turn | None:
     )
 
 
+def _classify_tool_call(block: dict) -> dict:
+    """Extract and classify a tool_use block by source.
+
+    MCP tool names follow the pattern ``mcp__<server>__<tool>``.
+    Returns a dict with id, name, input, plus source and mcp_server fields.
+    """
+    name = block.get("name", "")
+    result = {
+        "id": block.get("id", ""),
+        "name": name,
+        "input": block.get("input", {}),
+    }
+
+    if name.startswith("mcp__"):
+        parts = name.split("__", 2)
+        result["source"] = "mcp"
+        result["mcp_server"] = parts[1] if len(parts) >= 2 else "unknown"
+    else:
+        result["source"] = "standard"
+        result["mcp_server"] = ""
+
+    return result
+
+
 def _format_tool_call(tool_call: dict) -> str:
     """Format a tool call as an XML-tagged string for training data."""
-    # Compact JSON for the arguments.
     args_json = json.dumps(tool_call.get("input", {}), ensure_ascii=False, separators=(",", ":"))
     name = tool_call.get("name", "unknown")
-    return f'<tool_call name="{name}">\n{args_json}\n</tool_call>'
+    source = tool_call.get("source", "standard")
+    attrs = f'name="{name}" source="{source}"'
+    mcp_server = tool_call.get("mcp_server", "")
+    if mcp_server:
+        attrs += f' mcp_server="{mcp_server}"'
+    return f"<tool_call {attrs}>\n{args_json}\n</tool_call>"
 
 
 def discover_sessions(base_dir: Path, pattern: str = "-home-ubuntu-gt-*") -> list[Path]:
@@ -310,6 +375,9 @@ if __name__ == "__main__":
             session = extract_session(path)
             if session:
                 print(f"Session: {session.session_id}")
+                print(f"Runtime: {session.runtime_type}")
+                if session.mcp_servers:
+                    print(f"MCP servers: {', '.join(session.mcp_servers)}")
                 print(f"Turns: {len(session.turns)}")
                 for i, turn in enumerate(session.turns[:5]):
                     preview = turn.content[:100].replace("\n", " ")
