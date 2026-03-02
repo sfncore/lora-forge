@@ -124,7 +124,6 @@
 {"issue_id":"lf-lora_forge-polecat-dinki","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-furiosa","label":"done-intent:COMPLETED:1772080329"}
 {"issue_id":"lf-lora_forge-polecat-furiosa","label":"gt:agent"}
-{"issue_id":"lf-lora_forge-polecat-furiosa","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-fury","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-gastown","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-glory","label":"gt:agent"}
@@ -139,7 +138,6 @@
 {"issue_id":"lf-lora_forge-polecat-morsov","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-nightrider","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-nux","label":"gt:agent"}
-{"issue_id":"lf-lora_forge-polecat-nux","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-organic","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-prime","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-rictus","label":"gt:agent"}
@@ -148,7 +146,6 @@
 {"issue_id":"lf-lora_forge-polecat-scrotus","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-shiny","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-slit","label":"done-intent:COMPLETED:1771959799"}
-{"issue_id":"lf-lora_forge-polecat-slit","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-slit","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-splendid","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-toast","label":"gt:agent"}
@@ -159,6 +156,7 @@
 {"issue_id":"lf-lora_forge-polecat-wasteland","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-wraith","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-wretched","label":"gt:agent"}
+{"issue_id":"lf-lora_forge-witness","label":"backoff-until:1772411689"}
 {"issue_id":"lf-luxv","label":"breadcrumbs"}
 {"issue_id":"lf-luxv","label":"training"}
 {"issue_id":"lf-luxv","label":"wave-3"}
