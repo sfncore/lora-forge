@@ -54,3 +54,6 @@ plugins/
 # Oh My Pi and Beads runtime
 .beads/
 .omp/
+
+# Dolt runtime state
+.dolt/

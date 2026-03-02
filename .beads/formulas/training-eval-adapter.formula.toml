@@ -1,0 +1,128 @@
+# Training Eval Adapter Formula
+#
+# Evaluate trained LoRA adapters against role-specific scenarios.
+# Parallel legs per role, then synthesize results into a comprehensive report.
+
+description = """
+Evaluate trained LoRA adapters against role-specific scenarios using role_bench.
+
+Runs parallel evaluation legs for each specified role:
+- Each leg runs role_bench scenarios against the trained adapter
+- Each leg produces a per-role evaluation score
+- Synthesis step aggregates scores, compares to baseline, and produces a report
+- Optional LLM judge leg for semantic evaluation via frontier model API
+
+This formula is designed to be the tail end of a retrain cycle (B.2).
+"""
+
+formula = "training-eval-adapter"
+type = "convoy"
+version = 1
+
+# Parallel legs - one per role
+[[legs]]
+id = "eval-mayor"
+title = "Evaluate mayor adapter"
+role = "mayor"
+description = """
+Run role_bench scenarios against the trained mayor adapter.
+
+**Process:**
+1. Load base model + mayor adapter from {{adapter_path}}
+2. Run role_bench with mayor-specific scenarios
+3. Compute quantitative score based on scenario completion
+4. Generate per-role evaluation report
+
+**Output:** Evaluation metrics for mayor role in output/eval/mayor/
+"""
+acceptance = "Mayor adapter evaluated successfully, metrics generated"
+
+[[legs]]
+id = "eval-polecat"
+title = "Evaluate polecat adapter"
+role = "polecat"
+description = """
+Run role_bench scenarios against the trained polecat adapter.
+
+**Process:**
+1. Load base model + polecat adapter from {{adapter_path}}
+2. Run role_bench with polecat-specific scenarios  
+3. Compute quantitative score based on scenario completion
+4. Generate per-role evaluation report
+
+**Output:** Evaluation metrics for polecat role in output/eval/polecat/
+"""
+acceptance = "Polecat adapter evaluated successfully, metrics generated"
+
+[[legs]]
+id = "eval-deacon"
+title = "Evaluate deacon adapter"
+role = "deacon"
+description = """
+Run role_bench scenarios against the trained deacon adapter.
+
+**Process:**
+1. Load base model + deacon adapter from {{adapter_path}}
+2. Run role_bench with deacon-specific scenarios
+3. Compute quantitative score based on scenario completion
+4. Generate per-role evaluation report
+
+**Output:** Evaluation metrics for deacon role in output/eval/deacon/
+"""
+acceptance = "Deacon adapter evaluated successfully, metrics generated"
+
+# Optional LLM judge leg
+[[legs]]
+id = "llm-judge"
+title = "LLM semantic evaluation"
+optional = true
+description = """
+Run semantic evaluation using a frontier model as judge.
+
+**Process:**
+1. For each role's evaluation scenarios, collect adapter responses
+2. Submit responses to frontier model API for semantic quality assessment
+3. Compare semantic scores with quantitative role_bench scores
+4. Flag scenarios where semantic and quantitative scores diverge significantly
+
+**Output:** Semantic evaluation report in output/eval/llm-judge/
+"""
+acceptance = "LLM judge evaluation completed, semantic report generated"
+
+# Synthesis step - depends on all legs
+[[steps]]
+id = "synthesize-results"
+title = "Synthesize evaluation results"
+needs = ["eval-mayor", "eval-polecat", "eval-deacon"]
+optional_needs = ["llm-judge"]
+description = """
+Aggregate all evaluation results into a comprehensive report.
+
+**Process:**
+1. Collect per-role evaluation metrics from all legs
+2. Compare against baseline (previous version or unadapted model)
+3. Generate summary statistics: mean score, improvement vs baseline
+4. Highlight roles with significant improvement or regression
+5. Include LLM judge findings if available
+6. Provide recommendations: deploy adapters? retrain specific roles?
+
+**Output:** Comprehensive evaluation report in sf_workflows/reports/eval-{{date}}.md
+"""
+acceptance = "Comprehensive evaluation report generated with recommendations"
+
+[vars]
+[vars.roles]
+description = "Roles to evaluate (comma-separated)"
+default = "mayor,polecat,deacon"
+
+[vars.adapter_path]
+description = "Path to trained adapters"
+default = "output/adapters"
+
+[vars.enable_llm_judge]
+description = "Enable LLM judge for semantic evaluation"
+default = false
+
+[vars.baseline_version]
+description = "Baseline version to compare against"
+default = "previous"

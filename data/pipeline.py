@@ -111,6 +111,8 @@ def transform_session(session: ExtractedSession) -> list[dict]:
             session_id=session.session_id,
             chunk_index=chunk.chunk_index,
             quality_score=quality.score,
+            runtime_type=session.runtime_type,
+            mcp_servers=session.mcp_servers,
         )
 
         # Add outcome_score to sample metadata.
@@ -191,17 +193,23 @@ def run_pipeline(
         stats["total_turns"] = sum(len(s.turns) for s in sessions)
 
         # Save raw extractions for debugging.
+        runtime_counts: dict[str, int] = {}
         with open(raw_path, "w") as f:
             for s in sessions:
+                runtime_counts[s.runtime_type] = runtime_counts.get(s.runtime_type, 0) + 1
                 record = {
                     "session_id": s.session_id,
                     "source_path": s.source_path,
                     "num_turns": len(s.turns),
+                    "runtime_type": s.runtime_type,
+                    "mcp_servers": s.mcp_servers,
                     "metadata": s.metadata,
                 }
                 f.write(json.dumps(record) + "\n")
 
+        stats["runtime_distribution"] = runtime_counts
         logger.info("Extracted %d sessions, %d total turns", stats["sessions_extracted"], stats["total_turns"])
+        logger.info("Runtime types: %s", ", ".join(f"{k}={v}" for k, v in sorted(runtime_counts.items())))
 
         # Link OTel signals into session metadata before scoring/transform.
         linker = SessionLinker()

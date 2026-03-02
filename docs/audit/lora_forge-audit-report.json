@@ -1,0 +1,242 @@
+{
+  "metadata": {
+    "generated": "2026-02-24T23:41:08.022473",
+    "target": "lora_forge",
+    "formulas_audited": 30,
+    "total_findings": 12
+  },
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 6,
+    "info": 6
+  },
+  "findings": [
+    {
+      "severity": "low",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt may lack clear instructions",
+      "recommendation": "Consider adding explicit instructions (must/should/do not)",
+      "details": {}
+    },
+    {
+      "severity": "info",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt might benefit from examples or context",
+      "recommendation": "Consider adding examples or background context",
+      "details": {}
+    },
+    {
+      "severity": "low",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt may lack clear instructions",
+      "recommendation": "Consider adding explicit instructions (must/should/do not)",
+      "details": {}
+    },
+    {
+      "severity": "info",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt might benefit from examples or context",
+      "recommendation": "Consider adding examples or background context",
+      "details": {}
+    },
+    {
+      "severity": "low",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt may lack clear instructions",
+      "recommendation": "Consider adding explicit instructions (must/should/do not)",
+      "details": {}
+    },
+    {
+      "severity": "info",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt might benefit from examples or context",
+      "recommendation": "Consider adding examples or background context",
+      "details": {}
+    },
+    {
+      "severity": "low",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt may lack clear instructions",
+      "recommendation": "Consider adding explicit instructions (must/should/do not)",
+      "details": {}
+    },
+    {
+      "severity": "info",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt might benefit from examples or context",
+      "recommendation": "Consider adding examples or background context",
+      "details": {}
+    },
+    {
+      "severity": "low",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt may lack clear instructions",
+      "recommendation": "Consider adding explicit instructions (must/should/do not)",
+      "details": {}
+    },
+    {
+      "severity": "info",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt might benefit from examples or context",
+      "recommendation": "Consider adding examples or background context",
+      "details": {}
+    },
+    {
+      "severity": "low",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt may lack clear instructions",
+      "recommendation": "Consider adding explicit instructions (must/should/do not)",
+      "details": {}
+    },
+    {
+      "severity": "info",
+      "category": "prompt",
+      "formula": "training-generate-dpo-pairs",
+      "location": "step-2-block-0",
+      "issue": "Prompt might benefit from examples or context",
+      "recommendation": "Consider adding examples or background context",
+      "details": {}
+    }
+  ],
+  "categorized": {
+    "critical": [],
+    "high": [],
+    "medium": [],
+    "low": [
+      {
+        "severity": "low",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt may lack clear instructions",
+        "recommendation": "Consider adding explicit instructions (must/should/do not)",
+        "details": {}
+      },
+      {
+        "severity": "low",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt may lack clear instructions",
+        "recommendation": "Consider adding explicit instructions (must/should/do not)",
+        "details": {}
+      },
+      {
+        "severity": "low",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt may lack clear instructions",
+        "recommendation": "Consider adding explicit instructions (must/should/do not)",
+        "details": {}
+      },
+      {
+        "severity": "low",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt may lack clear instructions",
+        "recommendation": "Consider adding explicit instructions (must/should/do not)",
+        "details": {}
+      },
+      {
+        "severity": "low",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt may lack clear instructions",
+        "recommendation": "Consider adding explicit instructions (must/should/do not)",
+        "details": {}
+      },
+      {
+        "severity": "low",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt may lack clear instructions",
+        "recommendation": "Consider adding explicit instructions (must/should/do not)",
+        "details": {}
+      }
+    ],
+    "info": [
+      {
+        "severity": "info",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt might benefit from examples or context",
+        "recommendation": "Consider adding examples or background context",
+        "details": {}
+      },
+      {
+        "severity": "info",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt might benefit from examples or context",
+        "recommendation": "Consider adding examples or background context",
+        "details": {}
+      },
+      {
+        "severity": "info",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt might benefit from examples or context",
+        "recommendation": "Consider adding examples or background context",
+        "details": {}
+      },
+      {
+        "severity": "info",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt might benefit from examples or context",
+        "recommendation": "Consider adding examples or background context",
+        "details": {}
+      },
+      {
+        "severity": "info",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt might benefit from examples or context",
+        "recommendation": "Consider adding examples or background context",
+        "details": {}
+      },
+      {
+        "severity": "info",
+        "category": "prompt",
+        "formula": "training-generate-dpo-pairs",
+        "location": "step-2-block-0",
+        "issue": "Prompt might benefit from examples or context",
+        "recommendation": "Consider adding examples or background context",
+        "details": {}
+      }
+    ]
+  }
+}
