@@ -86,7 +86,6 @@
 {"issue_id":"lf-lo4t","label":"research"}
 {"issue_id":"lf-lo4t","label":"training"}
 {"issue_id":"lf-lo4t","label":"wave-1"}
-{"issue_id":"lf-lora_forge-crew-forge","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-51","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-52","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-53","label":"gt:agent"}
@@ -157,8 +156,6 @@
 {"issue_id":"lf-lora_forge-polecat-wasteland","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-wraith","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-wretched","label":"gt:agent"}
-{"issue_id":"lf-lora_forge-refinery","label":"gt:agent"}
-{"issue_id":"lf-lora_forge-witness","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-witness","label":"idle:0"}
 {"issue_id":"lf-luxv","label":"breadcrumbs"}
 {"issue_id":"lf-luxv","label":"training"}
