@@ -145,7 +145,11 @@
 {"issue_id":"lf-lora_forge-polecat-rockryder","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-scrotus","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-shiny","label":"gt:agent"}
-{"issue_id":"lf-lora_forge-polecat-slit","label":"done-intent:COMPLETED:1771959799"}
+{"issue_id":"lf-lora_forge-polecat-slit","label":"done-intent:COMPLETED:1772696961"}
+{"issue_id":"lf-lora_forge-polecat-slit","label":"done-intent:COMPLETED:1772698417"}
+{"issue_id":"lf-lora_forge-polecat-slit","label":"done-intent:COMPLETED:1772698715"}
+{"issue_id":"lf-lora_forge-polecat-slit","label":"done-intent:COMPLETED:1772698728"}
+{"issue_id":"lf-lora_forge-polecat-slit","label":"done-intent:COMPLETED:1772699635"}
 {"issue_id":"lf-lora_forge-polecat-slit","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-splendid","label":"gt:agent"}
 {"issue_id":"lf-lora_forge-polecat-toast","label":"gt:agent"}
@@ -175,7 +179,6 @@
 {"issue_id":"lf-q7rs","label":"training"}
 {"issue_id":"lf-q7rs","label":"wave-3"}
 {"issue_id":"lf-rig-lora_forge","label":"gt:rig"}
-{"issue_id":"lf-rig-lora_forge","label":"status:docked"}
 {"issue_id":"lf-rsud","label":"formulas"}
 {"issue_id":"lf-rsud","label":"meta"}
 {"issue_id":"lf-rsud","label":"training"}
