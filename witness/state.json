@@ -1,9 +1,11 @@
 {
-  "patrol_count": 42,
+  "patrol_count": 45,
   "extraordinary_action": true,
-  "last_patrol": "2026-03-02T12:15:00.000000",
+  "last_patrol": "2026-03-05T18:00:00.000000",
   "actions": [
-    "Patrol 42: POLECAT RECOVERY COMPLETE - All 6 polecats (capable, dementus, furiosa, nux, rictus, slit) recreated by Dog and idle. Deacon+Refinery healthy. Sessions will start on work dispatch. Inbox clean, no timer gates, no swarm.",
-    "Patrol 41: 4/6 polecats recreated (furiosa, nux, rictus, slit) - sessions/git repos pending. 2 polecats (capable, dementus) agent beads CLOSED by Dog - need recreation. Deacon+Refinery healthy. Inbox clean, no timer gates, no swarm."
+    "Patrol 45: Furiosa session was dead (stuck on lf-6eq eval review). Restarted session per Restart-First Policy. Furiosa now alive and working. Other 5 polecats idle/done (expected). Deacon healthy, Refinery dead (idle). No timer gates, no swarm, inbox clean. Handoff at 45 patrols + extraordinary action (polecat restart).",
+    "Patrol 44: All systems nominal. Deacon+Refinery healthy. 2 polecats done (capable:lf-q7rs CLOSED, dementus:lf-7v8d CLOSED), 4 idle (furiosa/nux/rictus/slit - bd backup artifacts only). No timer gates, no swarm, inbox clean. Ready for new work dispatch.",
+    "Patrol 43: Dementus completed lf-7v8d (eval task). Capable on lf-q7rs (training). Refinery session dead, Deacon healthy. 4 idle polecats have worktree sync issues (git ahead of origin with bd backups). Inbox clean, no timer gates, no swarm. Handoff after previous recovery complete.",
+    "Patrol 42: POLECAT RECOVERY COMPLETE - All 6 polecats (capable, dementus, furiosa, nux, rictus, slit) recreated by Dog and idle. Deacon+Refinery healthy. Sessions will start on work dispatch. Inbox clean, no timer gates, no swarm."
   ]
 }
