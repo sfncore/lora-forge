@@ -77,14 +77,15 @@ def compute_step_level_score(session: Dict[str, Any], otel_signals: Optional[Dic
     """
     # Priority cascade: OTel signals -> bead lifecycle -> events trail -> heuristic
     if otel_signals:
-        # Use OTel signals if available
+        # Use OTel signals if available — check status alongside exit_type
         exit_type = otel_signals.get("exit_type")
+        status = otel_signals.get("status")
         if exit_type == "COMPLETED":
-            step_score = 1.0
+            step_score = 1.0 if status != "error" else 0.7
         elif exit_type == "ESCALATED":
             step_score = 0.6
         elif exit_type == "DEFERRED":
-            step_score = 0.4
+            step_score = 0.3
         else:
             step_score = 0.5
     else:
@@ -144,10 +145,11 @@ def compute_formula_level_score(session: Dict[str, Any], otel_signals: Optional[
         else:
             duration_score = 0.5 - min((duration_ms - median_duration) / (2 * median_duration), 0.5)
             
-        # Completion rate from exit type
+        # Completion rate from exit type + status
         exit_type = otel_signals.get("exit_type")
+        status = otel_signals.get("status")
         if exit_type == "COMPLETED":
-            completion_score = 1.0
+            completion_score = 1.0 if status != "error" else 0.7
         elif exit_type == "ESCALATED":
             completion_score = 0.7
         elif exit_type == "DEFERRED":

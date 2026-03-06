@@ -15,11 +15,15 @@ ssh "$REMOTE" "mkdir -p ${REMOTE_DIR}/output/datasets ${REMOTE_DIR}/configs/role
 # Sync configs
 rsync -avz configs/ "${REMOTE}:${REMOTE_DIR}/configs/"
 
-# Sync training data (all roles, not just gastown)
-rsync -avz output/datasets/*_train.jsonl "${REMOTE}:${REMOTE_DIR}/output/datasets/"
-rsync -avz output/datasets/*_val.jsonl "${REMOTE}:${REMOTE_DIR}/output/datasets/"
+# Sync all datasets (per-role + combined), excluding Axolotl cache
+rsync -avz --exclude='prepared*' output/datasets/ "${REMOTE}:${REMOTE_DIR}/output/datasets/"
+
+# Sync eval framework and optuna rig
+rsync -avz eval/ "${REMOTE}:${REMOTE_DIR}/eval/"
+rsync -avz pyproject.toml "${REMOTE}:${REMOTE_DIR}/"
+[ -d optuna_rig ] && rsync -avz optuna_rig/ "${REMOTE}:${REMOTE_DIR}/optuna_rig/"
 
 echo "Done. SSH into ${REMOTE} and run:"
 echo "  cd ${REMOTE_DIR}"
 echo "  source /workspace/venv/bin/activate"
-echo "  axolotl train configs/base.yml"
+echo "  axolotl train configs/roles/<role>.yml  # e.g. mayor, deacon, witness"
