@@ -73,7 +73,7 @@ class TestFormatToolCall:
     def test_simple(self):
         tool_call = {"name": "bash", "input": {"command": "ls"}}
         formatted = _format_tool_call(tool_call)
-        assert '<tool_call name="bash">' in formatted
+        assert '<tool_call name="bash" source="standard">' in formatted
 
 class TestExtractSession:
     def test_basic(self, tmp_path: Path):
