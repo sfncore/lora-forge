@@ -51,8 +51,7 @@ plugins/
 .claude/commands/
 .logs/
 
-# Oh My Pi and Beads runtime
-.beads/
+# Oh My Pi runtime
 .omp/
 
 # Dolt runtime state
