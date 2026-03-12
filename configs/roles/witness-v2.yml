@@ -1,5 +1,5 @@
-# Witness role-specific LoRA config
-# Witness: code review, PR monitoring, issue validation, reporting to mayor/deacon
+# Witness v2 — hardened with 300 synthetic scenario examples
+# Dataset: 464 real + 300 synthetic = 764 total
 
 base_model: Qwen/Qwen3.5-2B
 model_type: AutoModelForCausalLM
@@ -13,16 +13,16 @@ lora_dropout: 0.05
 lora_target_linear: true
 
 datasets:
-  - path: output/datasets/witness_train.jsonl
+  - path: output/datasets/witness_v2.jsonl
     type: chat_template
     chat_template: chatml
     field_messages: conversations
     message_field_role: from
     message_field_content: value
 
-dataset_prepared_path: output/datasets/prepared_witness
+dataset_prepared_path: output/datasets/prepared_witness_v2
 val_set_size: 0.05
-output_dir: output/checkpoints/witness-v1
+output_dir: output/checkpoints/witness-v2
 
 sequence_len: 2048
 sample_packing: true
@@ -45,7 +45,7 @@ flash_attention: true
 
 wandb_project: lora-forge
 use_tensorboard: true
-wandb_name: witness-v1
+wandb_name: witness-v2
 
 saves_per_epoch: 2
 eval_steps: 50

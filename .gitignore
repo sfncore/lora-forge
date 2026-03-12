@@ -56,3 +56,4 @@ plugins/
 
 # Dolt runtime state
 .dolt/
+.hf/

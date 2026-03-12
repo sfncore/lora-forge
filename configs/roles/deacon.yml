@@ -44,6 +44,7 @@ tf32: true
 flash_attention: true
 
 wandb_project: lora-forge
+use_tensorboard: true
 wandb_name: deacon-v1
 
 saves_per_epoch: 2
