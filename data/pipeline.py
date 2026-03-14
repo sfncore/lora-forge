@@ -17,6 +17,12 @@ import logging
 import sys
 from pathlib import Path
 
+from data.extract.omp_sessions import (
+    OMP_SESSIONS_DIR,
+    discover_omp_sessions,
+    extract_omp_session,
+    is_omp_session,
+)
 from data.extract.sessions import ExtractedSession, discover_sessions, extract_session
 from data.transform.chat_formatter import append_jsonl, format_sharegpt
 from data.transform.chunker import Chunk, chunk_turns
@@ -31,6 +37,7 @@ from data.transform.tool_normalizer import normalize_turn_content
 logger = logging.getLogger(__name__)
 
 DEFAULT_SESSIONS_DIR = Path.home() / ".claude" / "projects"
+DEFAULT_OMP_SESSIONS_DIR = OMP_SESSIONS_DIR
 DEFAULT_OUTPUT_DIR = Path("output") / "datasets"
 
 
@@ -55,22 +62,62 @@ def session_to_scorer_dict(session: ExtractedSession) -> dict:
     return result
 
 
-def extract_all(sessions_dir: Path) -> list[ExtractedSession]:
-    """Extract all Gas Town sessions from the Claude projects directory."""
-    session_files = discover_sessions(sessions_dir)
-    logger.info("Discovered %d session files", len(session_files))
+def extract_all(sessions_dir: Path, source: str = "auto") -> list[ExtractedSession]:
+    """Extract all Gas Town sessions from Claude Code or omp session directories.
+
+    Args:
+        sessions_dir: Directory containing session files.
+        source: Session source format. One of:
+            - "auto": auto-detect based on directory path and file contents
+            - "omp": treat all files as omp format (~/.omp/agent/sessions/)
+            - "claude": treat all files as Claude Code format (~/.claude/projects/)
+
+    Returns:
+        List of extracted sessions with usable conversation data.
+    """
+    # Auto-detect source from directory path.
+    if source == "auto":
+        dir_str = str(sessions_dir)
+        if ".omp" in dir_str:
+            source = "omp"
+        elif ".claude" in dir_str:
+            source = "claude"
+        else:
+            # Peek at first file to determine format.
+            source = _detect_source(sessions_dir)
+
+    if source == "omp":
+        session_files = discover_omp_sessions(sessions_dir)
+        extractor = extract_omp_session
+    else:
+        session_files = discover_sessions(sessions_dir)
+        extractor = extract_session
+
+    logger.info("Discovered %d %s session files in %s", len(session_files), source, sessions_dir)
 
     sessions: list[ExtractedSession] = []
     for i, path in enumerate(session_files):
         if i % 50 == 0:
             logger.info("  Extracting %d/%d...", i, len(session_files))
 
-        session = extract_session(path)
+        session = extractor(path)
         if session:
             sessions.append(session)
 
     logger.info("Extracted %d sessions with data (from %d files)", len(sessions), len(session_files))
     return sessions
+
+
+def _detect_source(sessions_dir: Path) -> str:
+    """Auto-detect whether a directory contains omp or Claude Code sessions."""
+    for project_dir in sessions_dir.iterdir():
+        if not project_dir.is_dir():
+            continue
+        for jsonl_file in project_dir.glob("*.jsonl"):
+            if is_omp_session(jsonl_file):
+                return "omp"
+            return "claude"
+    return "claude"
 
 
 def transform_session(session: ExtractedSession) -> list[dict]:
@@ -174,8 +221,15 @@ def run_pipeline(
     sessions_dir: Path = DEFAULT_SESSIONS_DIR,
     output_dir: Path = DEFAULT_OUTPUT_DIR,
     step: str = "all",
+    source: str = "auto",
 ) -> dict:
     """Run the full pipeline or a specific step.
+
+    Args:
+        sessions_dir: Directory containing session files.
+        output_dir: Output directory for generated datasets.
+        step: Pipeline step to run ("all", "extract", "transform", "score").
+        source: Session format ("auto", "omp", "claude").
 
     Returns statistics about the pipeline run.
     """
@@ -185,10 +239,10 @@ def run_pipeline(
     # Step 1: Extract.
     raw_path = output_dir / "raw_sessions.jsonl"
     sessions: list[ExtractedSession] = []
-    
+
     if step in ("all", "extract", "transform", "score"):
         # Always extract first - we need full session data with turns
-        sessions = extract_all(sessions_dir)
+        sessions = extract_all(sessions_dir, source=source)
         stats["sessions_extracted"] = len(sessions)
         stats["total_turns"] = sum(len(s.turns) for s in sessions)
 
@@ -315,9 +369,15 @@ def run_pipeline(
 
 def main():
     parser = argparse.ArgumentParser(description="Gas Town LoRA training data pipeline")
-    parser.add_argument("--sessions-dir", type=Path, default=DEFAULT_SESSIONS_DIR, help="Claude projects directory")
+    parser.add_argument("--sessions-dir", type=Path, default=None, help="Session files directory (auto-detected if not set)")
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR, help="Output directory for datasets")
     parser.add_argument("--step", choices=["all", "extract", "transform", "score"], default="all", help="Pipeline step to run")
+    parser.add_argument(
+        "--source",
+        choices=["auto", "omp", "claude"],
+        default="auto",
+        help="Session format: 'omp' for ~/.omp/agent/sessions/, 'claude' for ~/.claude/projects/, 'auto' to detect",
+    )
     parser.add_argument("--verbose", "-v", action="store_true", help="Enable debug logging")
     args = parser.parse_args()
 
@@ -327,10 +387,25 @@ def main():
         datefmt="%H:%M:%S",
     )
 
+    # Default sessions dir based on source.
+    sessions_dir = args.sessions_dir
+    if sessions_dir is None:
+        if args.source == "omp":
+            sessions_dir = DEFAULT_OMP_SESSIONS_DIR
+        elif args.source == "claude":
+            sessions_dir = DEFAULT_SESSIONS_DIR
+        else:
+            # Auto: prefer omp if it exists, fall back to claude.
+            if DEFAULT_OMP_SESSIONS_DIR.exists():
+                sessions_dir = DEFAULT_OMP_SESSIONS_DIR
+            else:
+                sessions_dir = DEFAULT_SESSIONS_DIR
+
     stats = run_pipeline(
-        sessions_dir=args.sessions_dir,
+        sessions_dir=sessions_dir,
         output_dir=args.output_dir,
         step=args.step,
+        source=args.source,
     )
 
     print("\n--- Pipeline Statistics ---")

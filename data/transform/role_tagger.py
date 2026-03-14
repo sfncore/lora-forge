@@ -1,6 +1,6 @@
 """Map session directory paths to canonical Gas Town roles.
 
-Directory naming convention:
+Directory naming convention (Claude Code — ~/.claude/projects/):
   -home-ubuntu-gt-mayor/             → mayor
   -home-ubuntu-gt-deacon/            → deacon
   -home-ubuntu-gt-deacon-dogs-boot/  → boot (deacon sub-role)
@@ -9,6 +9,14 @@ Directory naming convention:
   -home-ubuntu-gt-{rig}-refinery-rig/ → refinery
   -home-ubuntu-gt-{rig}-crew-{name}-{rig}/ → crew
   -home-ubuntu-gt-{rig}-polecats-{name}-{rig}/ → polecat
+
+Directory naming convention (omp — ~/.omp/agent/sessions/):
+  -gt-sfgastown-polecats-jade-sfgastown/  → polecat
+  -gt-sfgastown-witness/                  → witness
+  -gt-sfgastown-refinery-rig/             → refinery
+  -gt-lora_forge-crew-forge/              → crew
+  -gt-deacon/                             → deacon
+  -gt-deacon-dogs-alpha/                  → deacon (dog)
 
 Content-based fallback: first user message often contains [GAS TOWN] role <- source.
 """
